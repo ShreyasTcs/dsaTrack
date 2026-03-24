@@ -1,0 +1,8 @@
+.heatmap { overflow-x: auto; }
+.grid { display: flex; flex-wrap: wrap; gap: 2px; }
+.cell { width: 10px; height: 10px; }
+.level0 { background: var(--bg-alt); }
+.level1 { background: color-mix(in srgb, var(--solved) 25%, var(--bg-alt)); }
+.level2 { background: color-mix(in srgb, var(--solved) 50%, var(--bg-alt)); }
+.level3 { background: color-mix(in srgb, var(--solved) 75%, var(--bg-alt)); }
+.level4 { background: var(--solved); }

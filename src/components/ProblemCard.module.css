@@ -1,0 +1,6 @@
+.card { display: block; padding: 8px 10px; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--fg); cursor: pointer; }
+.card:hover { background: var(--bg-hover); text-decoration: none; }
+.header { display: flex; align-items: center; gap: 8px; }
+.title { flex: 1; font-size: 13px; }
+.reason { font-size: 10px; color: var(--fg-faint); }
+.tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }

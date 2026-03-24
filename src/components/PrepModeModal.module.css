@@ -1,0 +1,7 @@
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: center; justify-content: center; }
+.modal { background: var(--bg); border: 1px solid var(--border); padding: 20px; width: 360px; }
+.title { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 11px; color: var(--fg-dim); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.field select, .field input { width: 100%; }
+.actions { display: flex; gap: 8px; margin-top: 16px; }

@@ -1,0 +1,19 @@
+.layout { display: flex; }
+.tableArea { flex: 1; overflow: auto; }
+.tableAreaCompressed { flex: 1; min-width: 0; overflow: auto; }
+.sortable { cursor: pointer; user-select: none; }
+.sortable:hover { color: var(--fg); }
+.problemLink { color: var(--fg); text-decoration: none; }
+.problemLink:hover { text-decoration: underline; }
+.cellSmall { font-size: 11px; color: var(--fg-dim); }
+.presets { display: flex; gap: 4px; margin-bottom: 8px; }
+.preset { font-size: 11px; padding: 2px 8px; }
+.presetActive { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.sheetChips { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+.sheetChip { font-size: 11px; padding: 2px 8px; cursor: pointer; border: 1px solid var(--border); background: transparent; font-family: inherit; color: var(--fg-dim); }
+.sheetChipActive { color: var(--fg); border-color: var(--fg); }
+.inlineAction { opacity: 0; transition: opacity 0.1s; cursor: pointer; background: none; border: none; font-size: 12px; color: var(--fg-dim); font-family: inherit; padding: 2px; }
+tr:hover .inlineAction { opacity: 1; }
+.diffDots { display: flex; gap: 2px; }
+.diffDot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+.diffDotFilled { background: var(--fg-dim); }

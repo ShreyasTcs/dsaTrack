@@ -1,0 +1,8 @@
+.formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.formActions { display: flex; gap: 6px; margin-top: 12px; }
+.statCard { text-align: center; padding: 8px 0; }
+.statValue { font-size: 20px; font-weight: 700; }
+.statLabel { font-size: 11px; color: var(--fg-faint); margin-top: 2px; }
+.ratingChange { margin-left: 4px; font-size: 11px; }
+.deleteBtn { font-size: 11px; padding: 2px 6px; opacity: 0; }
+tr:hover .deleteBtn { opacity: 1; }

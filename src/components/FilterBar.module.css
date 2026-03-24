@@ -1,0 +1,3 @@
+.bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.search { flex: 1; min-width: 160px; }
+.select { min-width: 120px; }

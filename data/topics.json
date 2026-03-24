@@ -1,0 +1,17 @@
+[
+  {"id":"arrays","name":"Arrays","description":"Linear data structure for storing elements","prerequisites":[],"problemIds":[1,11,15,26,27,36,42,48,49,53,55,56,66,73,80,88,121,128,134,152,167,169,189,217,228,238,239,252,253,271,274,289,347,380,435,452,918],"order":1},
+  {"id":"strings","name":"Strings","description":"Character sequences and manipulation","prerequisites":[],"problemIds":[3,5,12,13,14,28,43,49,58,67,76,125,205,242,271,290,383,392,424,647],"order":2},
+  {"id":"linked-lists","name":"Linked Lists","description":"Sequential nodes connected by pointers","prerequisites":["arrays"],"problemIds":[2,19,21,23,24,25,82,83,92,138,141,143,148,160,203,206,234,287],"order":3},
+  {"id":"stacks","name":"Stacks","description":"LIFO data structure","prerequisites":["arrays"],"problemIds":[20,22,42,84,150,155,224,239,739],"order":4},
+  {"id":"queues","name":"Queues","description":"FIFO data structure","prerequisites":["arrays"],"problemIds":[239,286,909,994],"order":5},
+  {"id":"hash-maps","name":"Hash Maps","description":"Key-value pair storage with O(1) lookup","prerequisites":["arrays"],"problemIds":[1,3,49,128,136,146,202,205,217,219,242,290,347,383,399],"order":6},
+  {"id":"trees","name":"Trees","description":"Hierarchical node-based data structure","prerequisites":["linked-lists","stacks","queues"],"problemIds":[98,100,102,104,105,108,110,114,117,124,199,222,226,230,235,236,297,427,530,543,572,637,1448],"order":7},
+  {"id":"heaps","name":"Heaps / Priority Queues","description":"Complete binary tree maintaining heap property","prerequisites":["trees"],"problemIds":[23,215,253,295,347,355,373,621,703,973,1046],"order":8},
+  {"id":"graphs","name":"Graphs","description":"Nodes connected by edges","prerequisites":["trees","hash-maps"],"problemIds":[127,130,133,200,207,210,261,269,286,323,332,399,417,433,684,695,743,778,787,909,994,1584],"order":9},
+  {"id":"tries","name":"Tries","description":"Tree-like structure for string prefix operations","prerequisites":["trees"],"problemIds":[208,211,212],"order":10},
+  {"id":"union-find","name":"Union-Find","description":"Disjoint set data structure","prerequisites":["graphs"],"problemIds":[128,261,323,684,1584],"order":11},
+  {"id":"matrices","name":"Matrices","description":"2D array operations","prerequisites":["arrays"],"problemIds":[36,48,54,73,74,79,130,200,240,286,289,329,417,695,994],"order":12},
+  {"id":"binary-search","name":"Binary Search","description":"Divide-and-conquer search on sorted data","prerequisites":["arrays"],"problemIds":[4,33,34,69,74,153,162,167,209,300,704,875,981],"order":13},
+  {"id":"dynamic-programming","name":"Dynamic Programming","description":"Optimization via overlapping subproblems","prerequisites":["arrays","binary-search"],"problemIds":[5,53,55,62,70,72,91,97,115,121,139,152,198,213,279,300,309,312,322,329,416,494,518,647,746,918,1143],"order":14},
+  {"id":"bit-manipulation","name":"Bit Manipulation","description":"Operations on binary representations","prerequisites":["arrays"],"problemIds":[7,136,190,191,268,338,371],"order":15}
+]

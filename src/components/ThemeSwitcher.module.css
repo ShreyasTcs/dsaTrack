@@ -1,0 +1,4 @@
+.switcher { display: flex; gap: 2px; }
+.btn { padding: 2px 6px; font-size: 11px; color: var(--fg-faint); background: transparent; border: none; cursor: pointer; font-family: inherit; }
+.btn:hover { color: var(--fg); }
+.active { color: var(--fg); font-weight: 600; }

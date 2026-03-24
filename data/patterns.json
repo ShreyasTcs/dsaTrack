@@ -1,0 +1,20 @@
+[
+  {"id":"two-pointers","name":"Two Pointers","description":"Use two pointers to traverse from different positions","problemIds":[1,11,15,26,27,42,75,80,88,125,141,143,167,234,287]},
+  {"id":"sliding-window","name":"Sliding Window","description":"Maintain a window that slides over data","problemIds":[3,76,209,239,424,567]},
+  {"id":"fast-slow-pointers","name":"Fast & Slow Pointers","description":"Two pointers moving at different speeds","problemIds":[19,141,143,202,234,287]},
+  {"id":"merge-intervals","name":"Merge Intervals","description":"Handle overlapping intervals","problemIds":[56,57,252,253,435,452]},
+  {"id":"binary-search-pattern","name":"Modified Binary Search","description":"Binary search variations on sorted/rotated data","problemIds":[4,33,34,69,74,153,162,167,300,704,875,981]},
+  {"id":"bfs","name":"BFS","description":"Breadth-first search for level-order traversal","problemIds":[102,127,130,199,200,286,433,909,994,1448]},
+  {"id":"dfs","name":"DFS","description":"Depth-first search for tree/graph traversal","problemIds":[79,98,100,104,105,110,114,124,130,131,133,200,207,210,226,235,236,297,329,417,543,572,684,695,1448]},
+  {"id":"backtracking","name":"Backtracking","description":"Explore all candidates and backtrack on invalid paths","problemIds":[17,22,39,40,46,51,77,78,79,90,131,212]},
+  {"id":"dynamic-programming-pattern","name":"Dynamic Programming","description":"Solve by combining solutions to subproblems","problemIds":[5,53,55,62,70,72,91,97,115,121,139,152,198,213,279,300,309,312,322,329,416,494,518,647,746,918,1143]},
+  {"id":"greedy","name":"Greedy","description":"Make locally optimal choices","problemIds":[45,55,121,134,135,435,452,621,763,846]},
+  {"id":"top-k","name":"Top-K Elements","description":"Find top/bottom K elements using heaps","problemIds":[23,215,295,347,355,373,621,703,973,1046]},
+  {"id":"topological-sort","name":"Topological Sort","description":"Linear ordering of vertices in a DAG","problemIds":[207,210,269,329]},
+  {"id":"bit-manipulation-pattern","name":"Bit Manipulation","description":"Use bitwise operations for efficient computation","problemIds":[7,136,190,191,268,338,371]},
+  {"id":"monotonic-stack","name":"Monotonic Stack/Queue","description":"Stack/queue maintaining monotonic order","problemIds":[42,84,239,739,853]},
+  {"id":"trie-pattern","name":"Trie","description":"Prefix tree operations","problemIds":[208,211,212]},
+  {"id":"union-find-pattern","name":"Union-Find","description":"Disjoint set operations for connectivity","problemIds":[128,261,323,684,1584]},
+  {"id":"divide-conquer","name":"Divide & Conquer","description":"Break problem into smaller subproblems","problemIds":[4,23,53,105,215]},
+  {"id":"subsets-pattern","name":"Subsets","description":"Generate all subsets/combinations","problemIds":[39,40,46,77,78,90]}
+]

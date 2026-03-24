@@ -1,0 +1,7 @@
+.list { }
+.item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.item:hover { background: var(--bg-hover); margin: 0 -10px; padding: 8px 10px; }
+.title { flex: 1; font-size: 13px; }
+.reason { font-size: 10px; color: var(--fg-faint); padding: 1px 6px; border: 1px solid var(--border); }
+.done { opacity: 0.4; text-decoration: line-through; }
+.active { color: var(--accent); }

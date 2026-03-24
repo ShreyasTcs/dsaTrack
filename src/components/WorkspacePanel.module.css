@@ -1,0 +1,36 @@
+/* Inline mode (Problems page) */
+.panelInline { width: 45%; border-left: 1px solid var(--border); padding: 16px; overflow-y: auto; max-height: calc(100vh - 60px); position: sticky; top: 60px; }
+
+/* Overlay mode (Today page) */
+.overlay { position: fixed; inset: 0; z-index: 150; display: flex; justify-content: flex-end; }
+.backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+.panelOverlay { position: relative; width: 420px; max-width: 90vw; background: var(--bg); border-left: 1px solid var(--border); padding: 16px; overflow-y: auto; animation: slideIn 200ms ease; }
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.close { background: none; border: none; color: var(--fg-dim); cursor: pointer; font-size: 16px; font-family: inherit; }
+.close:hover { color: var(--fg); }
+.title { font-size: 15px; font-weight: 600; }
+.chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px; }
+.section { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.sectionTitle { font-size: 11px; color: var(--fg-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.diffRow { display: flex; gap: 4px; }
+.diffBtn { width: 28px; height: 28px; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+.diffBtnActive { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.approachItem { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.approachName { font-weight: 600; font-size: 12px; }
+.approachDesc { font-size: 12px; color: var(--fg-dim); margin-top: 2px; }
+.approachMeta { font-size: 11px; color: var(--fg-faint); margin-top: 2px; }
+.reviewRow { display: flex; gap: 4px; }
+.reviewBtn { flex: 1; font-size: 12px; }
+.stat { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; }
+.actions { display: flex; gap: 6px; }
+.approachForm { border: 1px solid var(--border); padding: 10px; margin-bottom: 8px; }
+.approachFormRow { display: flex; gap: 6px; }
+.similarItem { display: flex; align-items: center; gap: 6px; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; text-decoration: none; color: var(--fg); }
+.similarItem:hover { color: var(--accent); text-decoration: none; }
+.similarItem:last-child { border-bottom: none; }
+.similarPlatform { font-size: 10px; color: var(--fg-faint); min-width: 28px; text-transform: uppercase; letter-spacing: 0.03em; }
+.similarTitle { flex: 1; }
+.similarDiff { font-size: 10px; color: var(--fg-dim); }
+.similarReason { font-size: 10px; color: var(--fg-faint); max-width: 100px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

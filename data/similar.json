@@ -1,0 +1,460 @@
+{
+  "1": [
+    { "title": "4Sum", "platform": "LC", "url": "https://leetcode.com/problems/4sum/", "difficulty": "Medium", "reason": "Generalizes Two Sum to 4 elements; same hash/sort+pointer approach" },
+    { "title": "Two Sum III - Data structure design", "platform": "LC", "url": "https://leetcode.com/problems/two-sum-iii-data-structure-design/", "difficulty": "Easy", "reason": "Extends Two Sum into a class design with add/find operations" },
+    { "title": "Subarray Sum Equals K", "platform": "LC", "url": "https://leetcode.com/problems/subarray-sum-equals-k/", "difficulty": "Medium", "reason": "Uses prefix-sum hash map the same way Two Sum uses a complement map" },
+    { "title": "Pair with Target Sum", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/key-pair5616/", "difficulty": "Easy", "reason": "Classic two-pointer / hash-map pair-finding — direct analogue of Two Sum" },
+    { "title": "Two Sum - Input array is sorted", "platform": "LC", "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/", "difficulty": "Easy", "reason": "Two Sum variant on a sorted array; teaches two-pointer as an alternative to hashing" }
+  ],
+  "2": [
+    { "title": "Add Two Numbers II", "platform": "LC", "url": "https://leetcode.com/problems/add-two-numbers-ii/", "difficulty": "Medium", "reason": "Same linked-list addition concept but digits stored in forward order" },
+    { "title": "Plus One Linked List", "platform": "LC", "url": "https://leetcode.com/problems/plus-one-linked-list/", "difficulty": "Medium", "reason": "Add 1 to a number represented as a linked list — same carry propagation logic" },
+    { "title": "Add to Array-Form of Integer", "platform": "LC", "url": "https://leetcode.com/problems/add-to-array-form-of-integer/", "difficulty": "Easy", "reason": "Digit-by-digit addition with carry; list instead of linked list" },
+    { "title": "Add Number Linked Lists", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/add-two-numbers-represented-by-linked-lists/", "difficulty": "Medium", "reason": "GFG variant of adding two numbers via linked lists" }
+  ],
+  "3": [
+    { "title": "Longest Substring with At Most Two Distinct Characters", "platform": "LC", "url": "https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/", "difficulty": "Medium", "reason": "Sliding window with a character frequency map; direct generalisation of LC 3" },
+    { "title": "Longest Substring with At Most K Distinct Characters", "platform": "LC", "url": "https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/", "difficulty": "Medium", "reason": "Further generalises the sliding window to K distinct characters" },
+    { "title": "Longest Substring Without Repeating Characters (CF variant)", "platform": "CF", "url": "https://codeforces.com/problemset/problem/676/C", "difficulty": "Medium", "reason": "Codeforces problem requiring similar sliding-window substring reasoning" },
+    { "title": "Fruit Into Baskets", "platform": "LC", "url": "https://leetcode.com/problems/fruit-into-baskets/", "difficulty": "Medium", "reason": "Sliding window keeping at most 2 distinct values — same pattern as LC 3" }
+  ],
+  "15": [
+    { "title": "4Sum", "platform": "LC", "url": "https://leetcode.com/problems/4sum/", "difficulty": "Medium", "reason": "Extends 3Sum to 4 elements with an extra outer loop" },
+    { "title": "3Sum Closest", "platform": "LC", "url": "https://leetcode.com/problems/3sum-closest/", "difficulty": "Medium", "reason": "Same sort + two-pointer setup but optimises for closest sum" },
+    { "title": "3Sum Smaller", "platform": "LC", "url": "https://leetcode.com/problems/3sum-smaller/", "difficulty": "Medium", "reason": "Count triplets with sum less than target — same two-pointer sweep" },
+    { "title": "Two Sum - Input array is sorted", "platform": "LC", "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/", "difficulty": "Easy", "reason": "Core two-pointer technique that 3Sum builds upon" }
+  ],
+  "11": [
+    { "title": "Maximal Rectangle", "platform": "LC", "url": "https://leetcode.com/problems/maximal-rectangle/", "difficulty": "Hard", "reason": "Extends largest rectangle in histogram to a 2-D matrix" },
+    { "title": "Trapping Rain Water", "platform": "LC", "url": "https://leetcode.com/problems/trapping-rain-water/", "difficulty": "Hard", "reason": "Same two-pointer reasoning on heights — closely related to water container" },
+    { "title": "Largest Rectangle in Histogram", "platform": "LC", "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/", "difficulty": "Hard", "reason": "Monotonic stack / two-pointer approach on a bar array — conceptual cousin" }
+  ],
+  "20": [
+    { "title": "Minimum Add to Make Parentheses Valid", "platform": "LC", "url": "https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/", "difficulty": "Medium", "reason": "Count minimum insertions to balance parentheses — builds on stack reasoning" },
+    { "title": "Longest Valid Parentheses", "platform": "LC", "url": "https://leetcode.com/problems/longest-valid-parentheses/", "difficulty": "Hard", "reason": "Stack-based tracking of valid parenthesis substrings" },
+    { "title": "Remove Invalid Parentheses", "platform": "LC", "url": "https://leetcode.com/problems/remove-invalid-parentheses/", "difficulty": "Hard", "reason": "BFS/backtracking over bracket removal — harder extension of validation" },
+    { "title": "Balanced Parentheses", "platform": "CF", "url": "https://codeforces.com/problemset/problem/3/C", "difficulty": "Easy", "reason": "Classic CF bracket validation problem" }
+  ],
+  "21": [
+    { "title": "Sort List", "platform": "LC", "url": "https://leetcode.com/problems/sort-list/", "difficulty": "Medium", "reason": "Merge sort on a linked list — uses merge-two-sorted-lists as a subroutine" },
+    { "title": "Merge Sorted Array", "platform": "LC", "url": "https://leetcode.com/problems/merge-sorted-array/", "difficulty": "Easy", "reason": "Merging two sorted sequences — same logic applied to arrays" },
+    { "title": "Merge K Sorted Lists", "platform": "LC", "url": "https://leetcode.com/problems/merge-k-sorted-lists/", "difficulty": "Hard", "reason": "Generalises merging two lists to K lists using a heap" }
+  ],
+  "42": [
+    { "title": "Container With Most Water", "platform": "LC", "url": "https://leetcode.com/problems/container-with-most-water/", "difficulty": "Medium", "reason": "Two-pointer height problem — closely related water-trapping scenario" },
+    { "title": "Trapping Rain Water II", "platform": "LC", "url": "https://leetcode.com/problems/trapping-rain-water-ii/", "difficulty": "Hard", "reason": "3-D extension of trapping rain water using a min-heap BFS" },
+    { "title": "Pour Water", "platform": "LC", "url": "https://leetcode.com/problems/pour-water/", "difficulty": "Medium", "reason": "Simulation of water filling — related height-array reasoning" },
+    { "title": "Largest Rectangle in Histogram", "platform": "LC", "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/", "difficulty": "Hard", "reason": "Monotonic stack on a height array — commonly paired with trapping rain water" }
+  ],
+  "46": [
+    { "title": "Permutations II", "platform": "LC", "url": "https://leetcode.com/problems/permutations-ii/", "difficulty": "Medium", "reason": "Same backtracking with duplicate-skipping logic" },
+    { "title": "Next Permutation", "platform": "LC", "url": "https://leetcode.com/problems/next-permutation/", "difficulty": "Medium", "reason": "In-place rearrangement to the lexicographically next permutation" },
+    { "title": "Permutation Sequence", "platform": "LC", "url": "https://leetcode.com/problems/permutation-sequence/", "difficulty": "Hard", "reason": "Find the k-th permutation — mathematical follow-up to generating all permutations" },
+    { "title": "Letter Tile Possibilities", "platform": "LC", "url": "https://leetcode.com/problems/letter-tile-possibilities/", "difficulty": "Medium", "reason": "Count permutation-like sequences with tile constraints" }
+  ],
+  "49": [
+    { "title": "Find All Anagrams in a String", "platform": "LC", "url": "https://leetcode.com/problems/find-all-anagrams-in-a-string/", "difficulty": "Medium", "reason": "Sliding window anagram detection — direct follow-up to group anagrams" },
+    { "title": "Sort Characters By Frequency", "platform": "LC", "url": "https://leetcode.com/problems/sort-characters-by-frequency/", "difficulty": "Medium", "reason": "Frequency map of characters — same building block as anagram grouping" },
+    { "title": "Valid Anagram", "platform": "LC", "url": "https://leetcode.com/problems/valid-anagram/", "difficulty": "Easy", "reason": "Foundation problem for checking anagram equality used in grouping" }
+  ],
+  "51": [
+    { "title": "N-Queens II", "platform": "LC", "url": "https://leetcode.com/problems/n-queens-ii/", "difficulty": "Hard", "reason": "Counts solutions instead of enumerating — same backtracking skeleton" },
+    { "title": "Sudoku Solver", "platform": "LC", "url": "https://leetcode.com/problems/sudoku-solver/", "difficulty": "Hard", "reason": "Constraint-based backtracking on a grid — the classic N-Queens partner problem" },
+    { "title": "Word Search", "platform": "LC", "url": "https://leetcode.com/problems/word-search/", "difficulty": "Medium", "reason": "DFS backtracking on a 2-D grid with visited tracking" }
+  ],
+  "22": [
+    { "title": "Valid Parentheses", "platform": "LC", "url": "https://leetcode.com/problems/valid-parentheses/", "difficulty": "Easy", "reason": "Validates bracket strings — logical prerequisite to generating them" },
+    { "title": "Letter Combinations of a Phone Number", "platform": "LC", "url": "https://leetcode.com/problems/letter-combinations-of-a-phone-number/", "difficulty": "Medium", "reason": "Same recursive combination-building pattern applied to phone digits" },
+    { "title": "Remove Invalid Parentheses", "platform": "LC", "url": "https://leetcode.com/problems/remove-invalid-parentheses/", "difficulty": "Hard", "reason": "BFS over parenthesis strings — harder sibling of generate parentheses" },
+    { "title": "Balanced Parentheses (CF 3C)", "platform": "CF", "url": "https://codeforces.com/problemset/problem/3/C", "difficulty": "Easy", "reason": "Classic Codeforces parenthesis balance problem" }
+  ],
+  "33": [
+    { "title": "Search in Rotated Sorted Array II", "platform": "LC", "url": "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/", "difficulty": "Medium", "reason": "Same problem with duplicates allowed — subtle edge case extension" },
+    { "title": "Find Minimum in Rotated Sorted Array", "platform": "LC", "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/", "difficulty": "Medium", "reason": "Binary search on a rotated array to find the pivot/minimum" },
+    { "title": "Find Peak Element", "platform": "LC", "url": "https://leetcode.com/problems/find-peak-element/", "difficulty": "Medium", "reason": "Binary search on an unsorted array — same mid-comparison reasoning" }
+  ],
+  "39": [
+    { "title": "Combination Sum II", "platform": "LC", "url": "https://leetcode.com/problems/combination-sum-ii/", "difficulty": "Medium", "reason": "Combination Sum with each element usable at most once and duplicate handling" },
+    { "title": "Combination Sum III", "platform": "LC", "url": "https://leetcode.com/problems/combination-sum-iii/", "difficulty": "Medium", "reason": "Find combinations that sum to n using digits 1-9 exactly k times" },
+    { "title": "Combination Sum IV", "platform": "LC", "url": "https://leetcode.com/problems/combination-sum-iv/", "difficulty": "Medium", "reason": "Count ordered combinations (permutations) summing to target — DP approach" },
+    { "title": "Subsets", "platform": "LC", "url": "https://leetcode.com/problems/subsets/", "difficulty": "Medium", "reason": "Foundational backtracking problem — subsets are combinations without a sum target" }
+  ],
+  "53": [
+    { "title": "Maximum Product Subarray", "platform": "LC", "url": "https://leetcode.com/problems/maximum-product-subarray/", "difficulty": "Medium", "reason": "Kadane's variant tracking both min and max — direct follow-up" },
+    { "title": "Maximum Sum Circular Subarray", "platform": "LC", "url": "https://leetcode.com/problems/maximum-sum-circular-subarray/", "difficulty": "Medium", "reason": "Extends maximum subarray to a circular array" },
+    { "title": "Subarray Sum Equals K", "platform": "LC", "url": "https://leetcode.com/problems/subarray-sum-equals-k/", "difficulty": "Medium", "reason": "Prefix sums with hash map — related subarray sum problem" },
+    { "title": "Maximum Subarray Sum with One Deletion", "platform": "LC", "url": "https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/", "difficulty": "Medium", "reason": "Kadane's extended to allow skipping one element" }
+  ],
+  "56": [
+    { "title": "Meeting Rooms", "platform": "LC", "url": "https://leetcode.com/problems/meeting-rooms/", "difficulty": "Easy", "reason": "Determine if intervals overlap — foundational interval problem" },
+    { "title": "Non-overlapping Intervals", "platform": "LC", "url": "https://leetcode.com/problems/non-overlapping-intervals/", "difficulty": "Medium", "reason": "Greedy interval removal to eliminate all overlaps" },
+    { "title": "Interval List Intersections", "platform": "LC", "url": "https://leetcode.com/problems/interval-list-intersections/", "difficulty": "Medium", "reason": "Two-pointer merge of two sorted interval lists" },
+    { "title": "Insert Interval", "platform": "LC", "url": "https://leetcode.com/problems/insert-interval/", "difficulty": "Medium", "reason": "Insert and merge a new interval into a sorted list" }
+  ],
+  "70": [
+    { "title": "Fibonacci Number", "platform": "LC", "url": "https://leetcode.com/problems/fibonacci-number/", "difficulty": "Easy", "reason": "Climbing stairs recurrence is identical to Fibonacci" },
+    { "title": "N-th Tribonacci Number", "platform": "LC", "url": "https://leetcode.com/problems/n-th-tribonacci-number/", "difficulty": "Easy", "reason": "Three-state recurrence — natural extension of the two-state climbing stairs" },
+    { "title": "Min Cost Climbing Stairs", "platform": "LC", "url": "https://leetcode.com/problems/min-cost-climbing-stairs/", "difficulty": "Easy", "reason": "Adds cost to each step — direct DP follow-up to climbing stairs" },
+    { "title": "Decode Ways", "platform": "LC", "url": "https://leetcode.com/problems/decode-ways/", "difficulty": "Medium", "reason": "Count ways to decode a string — same DP recurrence structure" }
+  ],
+  "72": [
+    { "title": "Delete Operation for Two Strings", "platform": "LC", "url": "https://leetcode.com/problems/delete-operation-for-two-strings/", "difficulty": "Medium", "reason": "Minimum deletions to make strings equal — reducible to LCS/edit distance" },
+    { "title": "One Edit Distance", "platform": "LC", "url": "https://leetcode.com/problems/one-edit-distance/", "difficulty": "Medium", "reason": "Check if two strings are exactly one edit apart — simpler edit distance" },
+    { "title": "Minimum ASCII Delete Sum for Two Strings", "platform": "LC", "url": "https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/", "difficulty": "Medium", "reason": "Edit distance variant minimising ASCII cost of deletions" },
+    { "title": "Shortest Common Supersequence", "platform": "LC", "url": "https://leetcode.com/problems/shortest-common-supersequence/", "difficulty": "Hard", "reason": "Build shortest string containing both as subsequences — uses LCS/edit distance DP" }
+  ],
+  "76": [
+    { "title": "Smallest Window Containing All Characters", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/smallest-window-in-a-string-containing-all-the-characters-of-another-string/", "difficulty": "Hard", "reason": "GFG version of minimum window substring" },
+    { "title": "Substring with Concatenation of All Words", "platform": "LC", "url": "https://leetcode.com/problems/substring-with-concatenation-of-all-words/", "difficulty": "Hard", "reason": "Sliding window over word-length chunks — harder variant of window problems" },
+    { "title": "Find All Anagrams in a String", "platform": "LC", "url": "https://leetcode.com/problems/find-all-anagrams-in-a-string/", "difficulty": "Medium", "reason": "Fixed-size sliding window with character frequency matching" },
+    { "title": "Permutation in String", "platform": "LC", "url": "https://leetcode.com/problems/permutation-in-string/", "difficulty": "Medium", "reason": "Check if any permutation of s1 exists in s2 — same frequency-window approach" }
+  ],
+  "78": [
+    { "title": "Subsets II", "platform": "LC", "url": "https://leetcode.com/problems/subsets-ii/", "difficulty": "Medium", "reason": "Subsets with duplicate elements — adds skip logic to standard backtracking" },
+    { "title": "Combination Sum", "platform": "LC", "url": "https://leetcode.com/problems/combination-sum/", "difficulty": "Medium", "reason": "Subsets with a target sum constraint" },
+    { "title": "Letter Case Permutation", "platform": "LC", "url": "https://leetcode.com/problems/letter-case-permutation/", "difficulty": "Medium", "reason": "Generate all case variations — subset-style branching on each character" }
+  ],
+  "79": [
+    { "title": "Word Search II", "platform": "LC", "url": "https://leetcode.com/problems/word-search-ii/", "difficulty": "Hard", "reason": "Find multiple words using a Trie + DFS — harder version of Word Search" },
+    { "title": "Path With Maximum Gold", "platform": "LC", "url": "https://leetcode.com/problems/path-with-maximum-gold/", "difficulty": "Medium", "reason": "DFS grid path finding with backtracking — same structure as Word Search" }
+  ],
+  "98": [
+    { "title": "Recover Binary Search Tree", "platform": "LC", "url": "https://leetcode.com/problems/recover-binary-search-tree/", "difficulty": "Medium", "reason": "Find two swapped BST nodes using inorder traversal — direct BST follow-up" },
+    { "title": "Inorder Successor in BST", "platform": "LC", "url": "https://leetcode.com/problems/inorder-successor-in-bst/", "difficulty": "Medium", "reason": "BST traversal to find the next larger node" },
+    { "title": "Binary Search Tree Iterator", "platform": "LC", "url": "https://leetcode.com/problems/binary-search-tree-iterator/", "difficulty": "Medium", "reason": "Implement lazy inorder traversal — validates BST property understanding" }
+  ],
+  "102": [
+    { "title": "Binary Tree Zigzag Level Order Traversal", "platform": "LC", "url": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/", "difficulty": "Medium", "reason": "BFS level order with alternating left/right direction" },
+    { "title": "N-ary Tree Level Order Traversal", "platform": "LC", "url": "https://leetcode.com/problems/n-ary-tree-level-order-traversal/", "difficulty": "Medium", "reason": "Generalises binary BFS to N children" },
+    { "title": "Binary Tree Level Order Traversal II", "platform": "LC", "url": "https://leetcode.com/problems/binary-tree-level-order-traversal-ii/", "difficulty": "Medium", "reason": "Same BFS, output reversed — direct variant" },
+    { "title": "Average of Levels in Binary Tree", "platform": "LC", "url": "https://leetcode.com/problems/average-of-levels-in-binary-tree/", "difficulty": "Easy", "reason": "BFS level aggregation — same traversal with a different reduction" }
+  ],
+  "121": [
+    { "title": "Best Time to Buy and Sell Stock III", "platform": "LC", "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/", "difficulty": "Hard", "reason": "At most 2 transactions — DP extension of the single-transaction problem" },
+    { "title": "Best Time to Buy and Sell Stock IV", "platform": "LC", "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/", "difficulty": "Hard", "reason": "At most k transactions — generalised DP" },
+    { "title": "Best Time to Buy and Sell Stock with Transaction Fee", "platform": "LC", "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/", "difficulty": "Medium", "reason": "Unlimited transactions with a fee — DP/greedy variant" },
+    { "title": "Best Time to Buy and Sell Stock with Cooldown", "platform": "LC", "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/", "difficulty": "Medium", "reason": "State machine DP with a cooldown state" }
+  ],
+  "128": [
+    { "title": "Longest Consecutive Sequence", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/longest-consecutive-subsequence/", "difficulty": "Medium", "reason": "GFG variant of the same consecutive sequence problem" },
+    { "title": "Array Nesting", "platform": "LC", "url": "https://leetcode.com/problems/array-nesting/", "difficulty": "Medium", "reason": "Find the longest cycle in a permutation array — related set/visited approach" },
+    { "title": "Missing Number", "platform": "LC", "url": "https://leetcode.com/problems/missing-number/", "difficulty": "Easy", "reason": "Find the missing element in a range — related consecutive reasoning" }
+  ],
+  "133": [
+    { "title": "Copy List with Random Pointer", "platform": "LC", "url": "https://leetcode.com/problems/copy-list-with-random-pointer/", "difficulty": "Medium", "reason": "Clone a linked list with extra pointers — same hash map clone pattern" },
+    { "title": "Clone N-ary Tree", "platform": "LC", "url": "https://leetcode.com/problems/clone-n-ary-tree/", "difficulty": "Medium", "reason": "Clone an N-ary tree — generalises clone graph to trees" }
+  ],
+  "139": [
+    { "title": "Word Break II", "platform": "LC", "url": "https://leetcode.com/problems/word-break-ii/", "difficulty": "Hard", "reason": "Return all valid sentences — backtracking on top of Word Break DP" },
+    { "title": "Concatenated Words", "platform": "LC", "url": "https://leetcode.com/problems/concatenated-words/", "difficulty": "Hard", "reason": "Find words composed entirely of shorter words — generalised Word Break" },
+    { "title": "Word Break", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/word-break/", "difficulty": "Medium", "reason": "GFG version of Word Break with DP" }
+  ],
+  "146": [
+    { "title": "LFU Cache", "platform": "LC", "url": "https://leetcode.com/problems/lfu-cache/", "difficulty": "Hard", "reason": "Evicts least-frequently-used item — harder cache design sibling of LRU" },
+    { "title": "Design HashMap", "platform": "LC", "url": "https://leetcode.com/problems/design-hashmap/", "difficulty": "Easy", "reason": "Implement a hash map from scratch — foundational building block of LRU cache" },
+    { "title": "All O`one Data Structure", "platform": "LC", "url": "https://leetcode.com/problems/all-oone-data-structure/", "difficulty": "Hard", "reason": "O(1) inc/dec/getMax/getMin — similar doubly-linked-list + map design" }
+  ],
+  "167": [
+    { "title": "3Sum Closest", "platform": "LC", "url": "https://leetcode.com/problems/3sum-closest/", "difficulty": "Medium", "reason": "Two Sum II extended with a third element — same sorted + two-pointer approach" },
+    { "title": "Pair of Songs With Total Durations Divisible by 60", "platform": "LC", "url": "https://leetcode.com/problems/pair-of-songs-with-total-durations-divisible-by-60/", "difficulty": "Medium", "reason": "Find pairs summing to a multiple of 60 — Two Sum with modular arithmetic" }
+  ],
+  "198": [
+    { "title": "House Robber III", "platform": "LC", "url": "https://leetcode.com/problems/house-robber-iii/", "difficulty": "Medium", "reason": "House Robber on a binary tree — tree DP extension" },
+    { "title": "Delete and Earn", "platform": "LC", "url": "https://leetcode.com/problems/delete-and-earn/", "difficulty": "Medium", "reason": "Reduce to House Robber after bucketing elements by value" },
+    { "title": "Paint House", "platform": "LC", "url": "https://leetcode.com/problems/paint-house/", "difficulty": "Medium", "reason": "DP with adjacent constraint — same no-adjacent-pick structure as House Robber" }
+  ],
+  "200": [
+    { "title": "Flood Fill", "platform": "LC", "url": "https://leetcode.com/problems/flood-fill/", "difficulty": "Easy", "reason": "DFS/BFS on a grid — foundational island-style traversal" },
+    { "title": "Island Perimeter", "platform": "LC", "url": "https://leetcode.com/problems/island-perimeter/", "difficulty": "Easy", "reason": "Count boundary cells of one island — related grid traversal" },
+    { "title": "Number of Distinct Islands", "platform": "LC", "url": "https://leetcode.com/problems/number-of-distinct-islands/", "difficulty": "Medium", "reason": "DFS with shape hashing — harder variant of Number of Islands" },
+    { "title": "Max Area of Island", "platform": "LC", "url": "https://leetcode.com/problems/max-area-of-island/", "difficulty": "Medium", "reason": "Find the largest island — direct extension counting cells per component" }
+  ],
+  "206": [
+    { "title": "Reverse Linked List II", "platform": "LC", "url": "https://leetcode.com/problems/reverse-linked-list-ii/", "difficulty": "Medium", "reason": "Reverse a sublist between positions m and n — partial reversal variant" },
+    { "title": "Palindrome Linked List", "platform": "LC", "url": "https://leetcode.com/problems/palindrome-linked-list/", "difficulty": "Easy", "reason": "Uses reverse-linked-list as a subroutine to check palindrome" },
+    { "title": "Reverse Nodes in k-Group", "platform": "LC", "url": "https://leetcode.com/problems/reverse-nodes-in-k-group/", "difficulty": "Hard", "reason": "Reverse every k nodes — repeated application of list reversal" }
+  ],
+  "207": [
+    { "title": "Course Schedule II", "platform": "LC", "url": "https://leetcode.com/problems/course-schedule-ii/", "difficulty": "Medium", "reason": "Return the topological order instead of just detecting a cycle" },
+    { "title": "Prerequisite Tasks", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/prerequisite-tasks/", "difficulty": "Medium", "reason": "GFG topological sort / cycle detection variant" },
+    { "title": "Topological Sort", "platform": "CF", "url": "https://codeforces.com/problemset/problem/510/C", "difficulty": "Medium", "reason": "Codeforces problem requiring topological ordering" },
+    { "title": "Minimum Height Trees", "platform": "LC", "url": "https://leetcode.com/problems/minimum-height-trees/", "difficulty": "Medium", "reason": "Iterative leaf-removal (topological trim) on an undirected graph" }
+  ],
+  "238": [
+    { "title": "Trapping Rain Water", "platform": "LC", "url": "https://leetcode.com/problems/trapping-rain-water/", "difficulty": "Hard", "reason": "Prefix/suffix max arrays — same left-right scan technique" },
+    { "title": "Prefix Sum", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/equilibrium-point-1587115620/", "difficulty": "Easy", "reason": "Prefix/suffix sum foundation directly related to product-except-self" },
+    { "title": "Running Sum of 1d Array", "platform": "LC", "url": "https://leetcode.com/problems/running-sum-of-1d-array/", "difficulty": "Easy", "reason": "Foundational prefix-sum problem" }
+  ],
+  "239": [
+    { "title": "Sliding Window Median", "platform": "LC", "url": "https://leetcode.com/problems/sliding-window-median/", "difficulty": "Hard", "reason": "Track median in a sliding window — harder sibling using two heaps" },
+    { "title": "Max Value of Equation", "platform": "LC", "url": "https://leetcode.com/problems/max-value-of-equation/", "difficulty": "Hard", "reason": "Monotonic deque optimisation — same deque technique as sliding window max" }
+  ],
+  "269": [
+    { "title": "Course Schedule", "platform": "LC", "url": "https://leetcode.com/problems/course-schedule/", "difficulty": "Medium", "reason": "Topological sort / cycle detection — same graph technique as alien dictionary" },
+    { "title": "Sequence Reconstruction", "platform": "LC", "url": "https://leetcode.com/problems/sequence-reconstruction/", "difficulty": "Medium", "reason": "Verify unique topological order — related ordering problem" },
+    { "title": "Topological Sort (CF)", "platform": "CF", "url": "https://codeforces.com/problemset/problem/510/C", "difficulty": "Medium", "reason": "Codeforces topological sort problem" }
+  ],
+  "295": [
+    { "title": "Sliding Window Median", "platform": "LC", "url": "https://leetcode.com/problems/sliding-window-median/", "difficulty": "Hard", "reason": "Same two-heap approach applied to a sliding window" },
+    { "title": "IPO", "platform": "LC", "url": "https://leetcode.com/problems/ipo/", "difficulty": "Hard", "reason": "Greedy with two heaps — similar heap management pattern" },
+    { "title": "Data Stream as Disjoint Intervals", "platform": "LC", "url": "https://leetcode.com/problems/data-stream-as-disjoint-intervals/", "difficulty": "Hard", "reason": "Maintain sorted intervals from a stream — related online data structure" }
+  ],
+  "297": [
+    { "title": "Serialize and Deserialize BST", "platform": "LC", "url": "https://leetcode.com/problems/serialize-and-deserialize-bst/", "difficulty": "Medium", "reason": "BST-specific serialization using preorder — simpler variant" },
+    { "title": "Construct Binary Tree from String", "platform": "LC", "url": "https://leetcode.com/problems/construct-binary-tree-from-string/", "difficulty": "Medium", "reason": "Parse a parenthesised string into a binary tree" },
+    { "title": "Codec (Serialize/Deserialize)", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/serialize-and-deserialize-a-binary-tree/", "difficulty": "Medium", "reason": "GFG version of binary tree serialization" }
+  ],
+  "300": [
+    { "title": "Number of Longest Increasing Subsequence", "platform": "LC", "url": "https://leetcode.com/problems/number-of-longest-increasing-subsequence/", "difficulty": "Medium", "reason": "Count LIS paths — extends the classic LIS DP" },
+    { "title": "Russian Doll Envelopes", "platform": "LC", "url": "https://leetcode.com/problems/russian-doll-envelopes/", "difficulty": "Hard", "reason": "2-D LIS — sort by one dimension, LIS on the other" },
+    { "title": "Longest Increasing Subsequence (CF)", "platform": "CF", "url": "https://codeforces.com/problemset/problem/340/D", "difficulty": "Hard", "reason": "Codeforces LIS problem with additional constraints" },
+    { "title": "Longest Bitonic Subsequence", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/longest-bitonic-subsequence/", "difficulty": "Medium", "reason": "LIS + LDS combination — natural extension of LIS" }
+  ],
+  "322": [
+    { "title": "Coin Change II", "platform": "LC", "url": "https://leetcode.com/problems/coin-change-ii/", "difficulty": "Medium", "reason": "Count ways to make change instead of minimising coins" },
+    { "title": "Perfect Squares", "platform": "LC", "url": "https://leetcode.com/problems/perfect-squares/", "difficulty": "Medium", "reason": "Minimum number of perfect squares summing to n — same BFS/DP structure" },
+    { "title": "Minimum Cost For Tickets", "platform": "LC", "url": "https://leetcode.com/problems/minimum-cost-for-tickets/", "difficulty": "Medium", "reason": "DP over travel days with 1/7/30-day pass costs — coin change variant" }
+  ],
+  "347": [
+    { "title": "Sort Characters By Frequency", "platform": "LC", "url": "https://leetcode.com/problems/sort-characters-by-frequency/", "difficulty": "Medium", "reason": "Frequency bucket sort — same heap/bucket approach as Top K Frequent" },
+    { "title": "Top K Frequent Words", "platform": "LC", "url": "https://leetcode.com/problems/top-k-frequent-words/", "difficulty": "Medium", "reason": "Top K with lexicographic tiebreaking — direct follow-up" },
+    { "title": "K Closest Points to Origin", "platform": "LC", "url": "https://leetcode.com/problems/k-closest-points-to-origin/", "difficulty": "Medium", "reason": "Max-heap of size K — same Top K pattern with a distance comparator" }
+  ],
+  "621": [
+    { "title": "Reorganize String", "platform": "LC", "url": "https://leetcode.com/problems/reorganize-string/", "difficulty": "Medium", "reason": "Place characters so no two adjacent are the same — same greedy/heap logic" },
+    { "title": "Rearrange String k Distance Apart", "platform": "LC", "url": "https://leetcode.com/problems/rearrange-string-k-distance-apart/", "difficulty": "Hard", "reason": "Generalises Task Scheduler cooling interval to k distance" },
+    { "title": "CPU Scheduling", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/cpu-scheduling/", "difficulty": "Medium", "reason": "GFG CPU scheduling problem related to task ordering" }
+  ],
+  "684": [
+    { "title": "Graph Valid Tree", "platform": "LC", "url": "https://leetcode.com/problems/graph-valid-tree/", "difficulty": "Medium", "reason": "Check if edges form a valid tree — cycle detection with union-find" },
+    { "title": "Number of Provinces", "platform": "LC", "url": "https://leetcode.com/problems/number-of-provinces/", "difficulty": "Medium", "reason": "Count connected components with union-find or DFS" },
+    { "title": "Most Stones Removed with Same Row or Column", "platform": "LC", "url": "https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/", "difficulty": "Medium", "reason": "Union-find on row/column coordinates" }
+  ],
+  "704": [
+    { "title": "First Bad Version", "platform": "LC", "url": "https://leetcode.com/problems/first-bad-version/", "difficulty": "Easy", "reason": "Binary search on a boolean condition — classic lower-bound template" },
+    { "title": "Search Insert Position", "platform": "LC", "url": "https://leetcode.com/problems/search-insert-position/", "difficulty": "Easy", "reason": "Binary search returning the insertion index" },
+    { "title": "Guess Number Higher or Lower", "platform": "LC", "url": "https://leetcode.com/problems/guess-number-higher-or-lower/", "difficulty": "Easy", "reason": "Binary search with a compare API — same bisect pattern" }
+  ],
+  "739": [
+    { "title": "Next Greater Element I", "platform": "LC", "url": "https://leetcode.com/problems/next-greater-element-i/", "difficulty": "Easy", "reason": "Monotonic stack to find next greater — simpler version of Daily Temperatures" },
+    { "title": "Next Greater Element II", "platform": "LC", "url": "https://leetcode.com/problems/next-greater-element-ii/", "difficulty": "Medium", "reason": "Circular array — same stack trick with index modulo" },
+    { "title": "Stock Span Problem", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/stock-span-problem-1587115621/", "difficulty": "Medium", "reason": "Previous greater element using monotonic stack — direct analogue" }
+  ],
+  "743": [
+    { "title": "Cheapest Flights Within K Stops", "platform": "LC", "url": "https://leetcode.com/problems/cheapest-flights-within-k-stops/", "difficulty": "Medium", "reason": "Bellman-Ford / modified Dijkstra with a stop limit" },
+    { "title": "Path With Minimum Effort", "platform": "LC", "url": "https://leetcode.com/problems/path-with-minimum-effort/", "difficulty": "Medium", "reason": "Dijkstra on a grid minimising maximum effort" },
+    { "title": "Dijkstra Shortest Path (CF)", "platform": "CF", "url": "https://codeforces.com/problemset/problem/20/C", "difficulty": "Medium", "reason": "Classic Codeforces Dijkstra problem" }
+  ],
+  "875": [
+    { "title": "Capacity To Ship Packages Within D Days", "platform": "LC", "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/", "difficulty": "Medium", "reason": "Binary search on capacity — same feasibility-check template as Koko" },
+    { "title": "Split Array Largest Sum", "platform": "LC", "url": "https://leetcode.com/problems/split-array-largest-sum/", "difficulty": "Hard", "reason": "Binary search on the answer — minimise the maximum subarray sum" },
+    { "title": "Magnetic Force Between Two Balls", "platform": "LC", "url": "https://leetcode.com/problems/magnetic-force-between-two-balls/", "difficulty": "Medium", "reason": "Binary search on the minimum distance — same parametric search pattern" }
+  ],
+  "973": [
+    { "title": "Closest Points to Origin", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/k-closest-points-to-origin/", "difficulty": "Medium", "reason": "GFG version of K closest points" },
+    { "title": "Top K Frequent Elements", "platform": "LC", "url": "https://leetcode.com/problems/top-k-frequent-elements/", "difficulty": "Medium", "reason": "Top K selection with a heap — same pattern, different comparator" },
+    { "title": "Kth Largest Element in a Stream", "platform": "LC", "url": "https://leetcode.com/problems/kth-largest-element-in-a-stream/", "difficulty": "Easy", "reason": "Maintain K-th largest online — min-heap of size K" }
+  ],
+  "994": [
+    { "title": "Walls and Gates", "platform": "LC", "url": "https://leetcode.com/problems/walls-and-gates/", "difficulty": "Medium", "reason": "Multi-source BFS from gates — same pattern as rotting oranges from oranges" },
+    { "title": "Shortest Path in Binary Matrix", "platform": "LC", "url": "https://leetcode.com/problems/shortest-path-in-binary-matrix/", "difficulty": "Medium", "reason": "BFS shortest path on a grid — direct structural match" },
+    { "title": "As Far from Land as Possible", "platform": "LC", "url": "https://leetcode.com/problems/as-far-from-land-as-possible/", "difficulty": "Medium", "reason": "Multi-source BFS from land cells — same technique applied to distance maximisation" }
+  ],
+  "1143": [
+    { "title": "Longest Palindromic Subsequence", "platform": "LC", "url": "https://leetcode.com/problems/longest-palindromic-subsequence/", "difficulty": "Medium", "reason": "LCS of a string with its reverse — classic LCS application" },
+    { "title": "Edit Distance", "platform": "LC", "url": "https://leetcode.com/problems/edit-distance/", "difficulty": "Medium", "reason": "DP on two strings — same 2-D DP table structure as LCS" },
+    { "title": "Shortest Common Supersequence", "platform": "LC", "url": "https://leetcode.com/problems/shortest-common-supersequence/", "difficulty": "Hard", "reason": "Uses LCS to build the shortest supersequence" },
+    { "title": "Delete Operation for Two Strings", "platform": "LC", "url": "https://leetcode.com/problems/delete-operation-for-two-strings/", "difficulty": "Medium", "reason": "Minimum deletions = lengths minus 2*LCS" }
+  ],
+  "pattern:two-pointers": [
+    { "title": "3Sum Closest", "platform": "LC", "url": "https://leetcode.com/problems/3sum-closest/", "difficulty": "Medium", "reason": "Sort + two-pointer scan for closest triplet sum" },
+    { "title": "Backspace String Compare", "platform": "LC", "url": "https://leetcode.com/problems/backspace-string-compare/", "difficulty": "Easy", "reason": "Two pointers from end of each string — space-efficient comparison" },
+    { "title": "Boats to Save People", "platform": "LC", "url": "https://leetcode.com/problems/boats-to-save-people/", "difficulty": "Medium", "reason": "Greedy two-pointer pairing lightest with heaviest" },
+    { "title": "Squares of a Sorted Array", "platform": "LC", "url": "https://leetcode.com/problems/squares-of-a-sorted-array/", "difficulty": "Easy", "reason": "Two pointers from both ends merging squares in order" },
+    { "title": "Sort Colors", "platform": "LC", "url": "https://leetcode.com/problems/sort-colors/", "difficulty": "Medium", "reason": "Dutch national flag — three-pointer in-place partition" }
+  ],
+  "pattern:sliding-window": [
+    { "title": "Fruit Into Baskets", "platform": "LC", "url": "https://leetcode.com/problems/fruit-into-baskets/", "difficulty": "Medium", "reason": "Sliding window with at most 2 distinct fruits" },
+    { "title": "Max Consecutive Ones III", "platform": "LC", "url": "https://leetcode.com/problems/max-consecutive-ones-iii/", "difficulty": "Medium", "reason": "Sliding window allowing at most K zero flips" },
+    { "title": "Grumpy Bookstore Owner", "platform": "LC", "url": "https://leetcode.com/problems/grumpy-bookstore-owner/", "difficulty": "Medium", "reason": "Fixed-size sliding window maximising bonus customers" },
+    { "title": "Subarrays with K Different Integers", "platform": "LC", "url": "https://leetcode.com/problems/subarrays-with-k-different-integers/", "difficulty": "Hard", "reason": "Count subarrays with exactly K distinct — atMostK trick" }
+  ],
+  "pattern:fast-slow-pointers": [
+    { "title": "Happy Number", "platform": "LC", "url": "https://leetcode.com/problems/happy-number/", "difficulty": "Easy", "reason": "Cycle detection with fast/slow pointers on digit-square sequences" },
+    { "title": "Middle of the Linked List", "platform": "LC", "url": "https://leetcode.com/problems/middle-of-the-linked-list/", "difficulty": "Easy", "reason": "Fast pointer reaches end when slow is at mid" },
+    { "title": "Circular Array Loop", "platform": "LC", "url": "https://leetcode.com/problems/circular-array-loop/", "difficulty": "Medium", "reason": "Detect cycle in a circular jump array using fast/slow" }
+  ],
+  "pattern:merge-intervals": [
+    { "title": "Interval List Intersections", "platform": "LC", "url": "https://leetcode.com/problems/interval-list-intersections/", "difficulty": "Medium", "reason": "Two-pointer merge of sorted interval lists" },
+    { "title": "Employee Free Time", "platform": "LC", "url": "https://leetcode.com/problems/employee-free-time/", "difficulty": "Hard", "reason": "Merge all employee schedules and find free gaps" },
+    { "title": "My Calendar I", "platform": "LC", "url": "https://leetcode.com/problems/my-calendar-i/", "difficulty": "Medium", "reason": "Online interval insertion checking for overlaps" }
+  ],
+  "pattern:binary-search-pattern": [
+    { "title": "Capacity To Ship Packages Within D Days", "platform": "LC", "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/", "difficulty": "Medium", "reason": "Binary search on the answer with a feasibility check" },
+    { "title": "Split Array Largest Sum", "platform": "LC", "url": "https://leetcode.com/problems/split-array-largest-sum/", "difficulty": "Hard", "reason": "Minimise maximum subarray sum via binary search" },
+    { "title": "Search in Sorted Matrix", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/search-in-a-matrix-1587115621/", "difficulty": "Easy", "reason": "Binary search extended to a sorted 2-D matrix" },
+    { "title": "Aggressive Cows", "platform": "SPOJ", "url": "https://www.spoj.com/problems/AGGRCOW/", "difficulty": "Medium", "reason": "Classic SPOJ binary search on minimum distance between cows" }
+  ],
+  "pattern:bfs": [
+    { "title": "Shortest Path in Binary Matrix", "platform": "LC", "url": "https://leetcode.com/problems/shortest-path-in-binary-matrix/", "difficulty": "Medium", "reason": "BFS shortest path on a grid — fundamental BFS application" },
+    { "title": "Open the Lock", "platform": "LC", "url": "https://leetcode.com/problems/open-the-lock/", "difficulty": "Medium", "reason": "BFS on a state space — find minimum moves on a combination lock" },
+    { "title": "Minimum Knight Moves", "platform": "LC", "url": "https://leetcode.com/problems/minimum-knight-moves/", "difficulty": "Medium", "reason": "BFS on chessboard positions — count minimum knight steps" },
+    { "title": "Jump Game III", "platform": "LC", "url": "https://leetcode.com/problems/jump-game-iii/", "difficulty": "Medium", "reason": "BFS/DFS reachability on jump array — reach index with value 0" }
+  ],
+  "pattern:dfs": [
+    { "title": "Number of Provinces", "platform": "LC", "url": "https://leetcode.com/problems/number-of-provinces/", "difficulty": "Medium", "reason": "DFS to count connected components in an adjacency matrix" },
+    { "title": "Flood Fill", "platform": "LC", "url": "https://leetcode.com/problems/flood-fill/", "difficulty": "Easy", "reason": "DFS grid coloring — entry-level DFS on 2-D grids" },
+    { "title": "All Paths From Source to Target", "platform": "LC", "url": "https://leetcode.com/problems/all-paths-from-source-to-target/", "difficulty": "Medium", "reason": "DFS enumerate all paths in a DAG" },
+    { "title": "Path Sum II", "platform": "LC", "url": "https://leetcode.com/problems/path-sum-ii/", "difficulty": "Medium", "reason": "DFS backtracking to collect all root-to-leaf paths with target sum" }
+  ],
+  "pattern:backtracking": [
+    { "title": "Sudoku Solver", "platform": "LC", "url": "https://leetcode.com/problems/sudoku-solver/", "difficulty": "Hard", "reason": "Constraint propagation + backtracking on a 9x9 grid" },
+    { "title": "Restore IP Addresses", "platform": "LC", "url": "https://leetcode.com/problems/restore-ip-addresses/", "difficulty": "Medium", "reason": "Backtrack over segment splits of a digit string" },
+    { "title": "Letter Tile Possibilities", "platform": "LC", "url": "https://leetcode.com/problems/letter-tile-possibilities/", "difficulty": "Medium", "reason": "Count non-empty sequences from tile characters — permutation backtracking" },
+    { "title": "Beautiful Arrangement", "platform": "LC", "url": "https://leetcode.com/problems/beautiful-arrangement/", "difficulty": "Medium", "reason": "Count permutations satisfying a divisibility condition — backtracking with pruning" }
+  ],
+  "pattern:dynamic-programming-pattern": [
+    { "title": "Minimum Path Sum", "platform": "LC", "url": "https://leetcode.com/problems/minimum-path-sum/", "difficulty": "Medium", "reason": "2-D DP on a grid — move right/down only" },
+    { "title": "Triangle", "platform": "LC", "url": "https://leetcode.com/problems/triangle/", "difficulty": "Medium", "reason": "Bottom-up DP on a triangle to find min path sum" },
+    { "title": "Dungeon Game", "platform": "LC", "url": "https://leetcode.com/problems/dungeon-game/", "difficulty": "Hard", "reason": "DP from bottom-right to top-left tracking minimum health" },
+    { "title": "Paint House", "platform": "LC", "url": "https://leetcode.com/problems/paint-house/", "difficulty": "Medium", "reason": "DP with adjacent-color constraint — classic state-machine DP" },
+    { "title": "Stone Game", "platform": "LC", "url": "https://leetcode.com/problems/stone-game/", "difficulty": "Medium", "reason": "Minimax / interval DP game problem" }
+  ],
+  "pattern:greedy": [
+    { "title": "Assign Cookies", "platform": "LC", "url": "https://leetcode.com/problems/assign-cookies/", "difficulty": "Easy", "reason": "Sort and greedily match smallest sufficient cookie to each child" },
+    { "title": "Lemonade Change", "platform": "LC", "url": "https://leetcode.com/problems/lemonade-change/", "difficulty": "Easy", "reason": "Greedy change-making simulation" },
+    { "title": "Queue Reconstruction by Height", "platform": "LC", "url": "https://leetcode.com/problems/queue-reconstruction-by-height/", "difficulty": "Medium", "reason": "Sort by height then greedy insertion by k — classic greedy" },
+    { "title": "Boats to Save People", "platform": "LC", "url": "https://leetcode.com/problems/boats-to-save-people/", "difficulty": "Medium", "reason": "Sort and greedily pair lightest with heaviest if possible" }
+  ],
+  "pattern:top-k": [
+    { "title": "Sort Characters By Frequency", "platform": "LC", "url": "https://leetcode.com/problems/sort-characters-by-frequency/", "difficulty": "Medium", "reason": "Frequency map then heap/bucket sort — top-K on characters" },
+    { "title": "Top K Frequent Words", "platform": "LC", "url": "https://leetcode.com/problems/top-k-frequent-words/", "difficulty": "Medium", "reason": "Top K with lexicographic tiebreaking using a heap" },
+    { "title": "Reorganize String", "platform": "LC", "url": "https://leetcode.com/problems/reorganize-string/", "difficulty": "Medium", "reason": "Greedy placement of most frequent character — top-K heap pattern" }
+  ],
+  "pattern:topological-sort": [
+    { "title": "Minimum Height Trees", "platform": "LC", "url": "https://leetcode.com/problems/minimum-height-trees/", "difficulty": "Medium", "reason": "Iterative leaf pruning — topological sort on an undirected tree" },
+    { "title": "Parallel Courses", "platform": "LC", "url": "https://leetcode.com/problems/parallel-courses/", "difficulty": "Medium", "reason": "Minimum semesters via topological BFS level-by-level" },
+    { "title": "Sequence Reconstruction", "platform": "LC", "url": "https://leetcode.com/problems/sequence-reconstruction/", "difficulty": "Medium", "reason": "Verify a unique topological ordering from subsequences" }
+  ],
+  "pattern:bit-manipulation-pattern": [
+    { "title": "Power of Two", "platform": "LC", "url": "https://leetcode.com/problems/power-of-two/", "difficulty": "Easy", "reason": "n & (n-1) trick to check power of two" },
+    { "title": "Hamming Distance", "platform": "LC", "url": "https://leetcode.com/problems/hamming-distance/", "difficulty": "Easy", "reason": "Count differing bits with XOR and popcount" },
+    { "title": "Total Hamming Distance", "platform": "LC", "url": "https://leetcode.com/problems/total-hamming-distance/", "difficulty": "Medium", "reason": "Sum hamming distances across all pairs efficiently per bit" },
+    { "title": "Complement of Base 10 Integer", "platform": "LC", "url": "https://leetcode.com/problems/complement-of-base-10-integer/", "difficulty": "Easy", "reason": "Flip all bits up to the highest set bit" }
+  ],
+  "pattern:monotonic-stack": [
+    { "title": "Next Greater Element I", "platform": "LC", "url": "https://leetcode.com/problems/next-greater-element-i/", "difficulty": "Easy", "reason": "Monotonic stack to find next greater element in a subset" },
+    { "title": "Next Greater Element II", "platform": "LC", "url": "https://leetcode.com/problems/next-greater-element-ii/", "difficulty": "Medium", "reason": "Circular array — same stack with modulo indexing" },
+    { "title": "Online Stock Span", "platform": "LC", "url": "https://leetcode.com/problems/online-stock-span/", "difficulty": "Medium", "reason": "Online previous-greater-or-equal with a stack" },
+    { "title": "Sum of Subarray Minimums", "platform": "LC", "url": "https://leetcode.com/problems/sum-of-subarray-minimums/", "difficulty": "Medium", "reason": "Monotonic stack to count contribution of each element as minimum" }
+  ],
+  "pattern:trie-pattern": [
+    { "title": "Replace Words", "platform": "LC", "url": "https://leetcode.com/problems/replace-words/", "difficulty": "Medium", "reason": "Trie prefix lookup to replace words with their root" },
+    { "title": "Search Suggestions System", "platform": "LC", "url": "https://leetcode.com/problems/search-suggestions-system/", "difficulty": "Medium", "reason": "Trie with sorted insertion for autocomplete suggestions" },
+    { "title": "Maximum XOR of Two Numbers in an Array", "platform": "LC", "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/", "difficulty": "Medium", "reason": "Binary trie to greedily maximise XOR bit by bit" }
+  ],
+  "pattern:union-find-pattern": [
+    { "title": "Number of Provinces", "platform": "LC", "url": "https://leetcode.com/problems/number-of-provinces/", "difficulty": "Medium", "reason": "Count connected components with union-find" },
+    { "title": "Most Stones Removed with Same Row or Column", "platform": "LC", "url": "https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/", "difficulty": "Medium", "reason": "Union-find on row/column coordinates to find components" },
+    { "title": "Accounts Merge", "platform": "LC", "url": "https://leetcode.com/problems/accounts-merge/", "difficulty": "Medium", "reason": "Union emails by account using union-find then collect components" },
+    { "title": "Satisfiability of Equality Equations", "platform": "LC", "url": "https://leetcode.com/problems/satisfiability-of-equality-equations/", "difficulty": "Medium", "reason": "Union-find to group equal variables then check inequalities" }
+  ],
+  "pattern:divide-conquer": [
+    { "title": "Different Ways to Add Parentheses", "platform": "LC", "url": "https://leetcode.com/problems/different-ways-to-add-parentheses/", "difficulty": "Medium", "reason": "Divide at each operator and combine results recursively" },
+    { "title": "Closest Pair of Points", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/closest-pair-of-points/", "difficulty": "Hard", "reason": "Classic divide-and-conquer geometric algorithm" },
+    { "title": "Merge Sort", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/merge-sort/", "difficulty": "Medium", "reason": "Foundational divide-and-conquer sorting algorithm" }
+  ],
+  "pattern:subsets-pattern": [
+    { "title": "Letter Case Permutation", "platform": "LC", "url": "https://leetcode.com/problems/letter-case-permutation/", "difficulty": "Medium", "reason": "Generate all case variants — subset-style binary branching" },
+    { "title": "Generalized Abbreviation", "platform": "LC", "url": "https://leetcode.com/problems/generalized-abbreviation/", "difficulty": "Medium", "reason": "Each character is either kept or abbreviated — 2^n subset enumeration" },
+    { "title": "Beautiful Arrangement II", "platform": "LC", "url": "https://leetcode.com/problems/beautiful-arrangement-ii/", "difficulty": "Medium", "reason": "Construct array with k distinct adjacent differences — combinatorial construction" }
+  ],
+  "topic:arrays": [
+    { "title": "Rotate Array", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/rotate-array-by-n-elements/", "difficulty": "Easy", "reason": "In-place array rotation — fundamental array manipulation" },
+    { "title": "Kadane's Algorithm", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/kadanes-algorithm/", "difficulty": "Medium", "reason": "Classic maximum subarray sum algorithm" },
+    { "title": "Stock Buy and Sell", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/stock-buy-and-sell/", "difficulty": "Easy", "reason": "Find all profitable buy-sell intervals in a price array" },
+    { "title": "Subarray with Given Sum", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/subarray-with-given-sum-1587115621/", "difficulty": "Easy", "reason": "Sliding window to find a subarray with exact target sum" },
+    { "title": "Next Permutation", "platform": "LC", "url": "https://leetcode.com/problems/next-permutation/", "difficulty": "Medium", "reason": "Rearrange array into the next lexicographic permutation in-place" }
+  ],
+  "topic:strings": [
+    { "title": "Longest Palindromic Substring", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/longest-palindrome-in-a-string/", "difficulty": "Medium", "reason": "Expand-around-centre or DP — foundational string DP" },
+    { "title": "Rabin-Karp String Search", "platform": "CF", "url": "https://codeforces.com/problemset/problem/271/D", "difficulty": "Medium", "reason": "Rolling hash string matching — Rabin-Karp application" },
+    { "title": "KMP Pattern Matching", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/search-pattern-kmp-algorithm/", "difficulty": "Medium", "reason": "Linear-time pattern matching using failure function" },
+    { "title": "String to Integer (atoi)", "platform": "LC", "url": "https://leetcode.com/problems/string-to-integer-atoi/", "difficulty": "Medium", "reason": "Parse integer from string with edge cases — string processing fundamentals" }
+  ],
+  "topic:linked-lists": [
+    { "title": "Flatten a Multilevel Doubly Linked List", "platform": "LC", "url": "https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/", "difficulty": "Medium", "reason": "DFS/iteration to flatten nested linked list structure" },
+    { "title": "Rotate List", "platform": "LC", "url": "https://leetcode.com/problems/rotate-list/", "difficulty": "Medium", "reason": "Rotate a linked list by k positions" },
+    { "title": "Odd Even Linked List", "platform": "LC", "url": "https://leetcode.com/problems/odd-even-linked-list/", "difficulty": "Medium", "reason": "Rearrange odd-indexed then even-indexed nodes in-place" },
+    { "title": "Add Number Linked Lists", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/add-two-numbers-represented-by-linked-lists/", "difficulty": "Medium", "reason": "Add two numbers stored as linked lists with carry handling" }
+  ],
+  "topic:stacks": [
+    { "title": "Implement Queue using Stacks", "platform": "LC", "url": "https://leetcode.com/problems/implement-queue-using-stacks/", "difficulty": "Easy", "reason": "Amortised O(1) queue with two stacks — classic stack application" },
+    { "title": "Simplify Path", "platform": "LC", "url": "https://leetcode.com/problems/simplify-path/", "difficulty": "Medium", "reason": "Stack-based Unix path canonicalization" },
+    { "title": "Decode String", "platform": "LC", "url": "https://leetcode.com/problems/decode-string/", "difficulty": "Medium", "reason": "Stack to handle nested encoded strings" },
+    { "title": "Asteroid Collision", "platform": "LC", "url": "https://leetcode.com/problems/asteroid-collision/", "difficulty": "Medium", "reason": "Stack simulation of asteroid collisions — direction-based stack problem" }
+  ],
+  "topic:queues": [
+    { "title": "Sliding Window Maximum", "platform": "LC", "url": "https://leetcode.com/problems/sliding-window-maximum/", "difficulty": "Hard", "reason": "Monotonic deque for O(n) sliding window maximum" },
+    { "title": "Design Circular Queue", "platform": "LC", "url": "https://leetcode.com/problems/design-circular-queue/", "difficulty": "Medium", "reason": "Implement a circular queue with array" },
+    { "title": "First Non-Repeating Character in a Stream", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/first-non-repeating-character-in-a-stream1216/", "difficulty": "Medium", "reason": "Queue + frequency map to track first non-repeating character online" }
+  ],
+  "topic:hash-maps": [
+    { "title": "Subarray Sum Equals K", "platform": "LC", "url": "https://leetcode.com/problems/subarray-sum-equals-k/", "difficulty": "Medium", "reason": "Prefix sum hash map — core hash map pattern" },
+    { "title": "4Sum II", "platform": "LC", "url": "https://leetcode.com/problems/4sum-ii/", "difficulty": "Medium", "reason": "Hash map to count pairwise sums from two arrays" },
+    { "title": "Minimum Window Substring", "platform": "LC", "url": "https://leetcode.com/problems/minimum-window-substring/", "difficulty": "Hard", "reason": "Sliding window with character frequency hash map" },
+    { "title": "Longest Substring Without Repeating Characters", "platform": "LC", "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/", "difficulty": "Medium", "reason": "Hash map of last-seen indices for O(n) sliding window" }
+  ],
+  "topic:trees": [
+    { "title": "Path Sum", "platform": "LC", "url": "https://leetcode.com/problems/path-sum/", "difficulty": "Easy", "reason": "DFS checking root-to-leaf sum — foundational tree traversal" },
+    { "title": "Symmetric Tree", "platform": "LC", "url": "https://leetcode.com/problems/symmetric-tree/", "difficulty": "Easy", "reason": "Mirror check with recursive or BFS comparison" },
+    { "title": "Sum Root to Leaf Numbers", "platform": "LC", "url": "https://leetcode.com/problems/sum-root-to-leaf-numbers/", "difficulty": "Medium", "reason": "Accumulate digit paths from root to leaf" },
+    { "title": "Binary Tree Cameras", "platform": "LC", "url": "https://leetcode.com/problems/binary-tree-cameras/", "difficulty": "Hard", "reason": "Greedy tree DP to place minimum cameras covering all nodes" }
+  ],
+  "topic:heaps": [
+    { "title": "Merge K Sorted Lists", "platform": "LC", "url": "https://leetcode.com/problems/merge-k-sorted-lists/", "difficulty": "Hard", "reason": "Min-heap to merge K sorted streams — canonical heap problem" },
+    { "title": "Smallest Range Covering Elements from K Lists", "platform": "LC", "url": "https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/", "difficulty": "Hard", "reason": "Sliding window + heap across K sorted lists" },
+    { "title": "Ugly Number II", "platform": "LC", "url": "https://leetcode.com/problems/ugly-number-ii/", "difficulty": "Medium", "reason": "Min-heap or DP to generate the n-th ugly number" },
+    { "title": "Find Median from Data Stream", "platform": "LC", "url": "https://leetcode.com/problems/find-median-from-data-stream/", "difficulty": "Hard", "reason": "Two-heap approach for online median — quintessential heap problem" }
+  ],
+  "topic:graphs": [
+    { "title": "Detect Cycle in a Directed Graph", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/", "difficulty": "Medium", "reason": "DFS with color/visited tracking to detect directed cycle" },
+    { "title": "Is Graph Bipartite?", "platform": "LC", "url": "https://leetcode.com/problems/is-graph-bipartite/", "difficulty": "Medium", "reason": "BFS/DFS 2-coloring to check bipartiteness" },
+    { "title": "Shortest Path in DAG", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph/", "difficulty": "Medium", "reason": "Topological sort + relaxation for DAG shortest path" },
+    { "title": "Course Schedule", "platform": "LC", "url": "https://leetcode.com/problems/course-schedule/", "difficulty": "Medium", "reason": "Detect cycle in a prerequisite directed graph" }
+  ],
+  "topic:tries": [
+    { "title": "Trie Implementation", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/trie-insert-and-search/", "difficulty": "Easy", "reason": "Build a trie with insert and search — foundational trie problem" },
+    { "title": "Design Search Autocomplete System", "platform": "LC", "url": "https://leetcode.com/problems/design-search-autocomplete-system/", "difficulty": "Hard", "reason": "Trie with frequency tracking for top-3 autocomplete" },
+    { "title": "Palindrome Pairs", "platform": "LC", "url": "https://leetcode.com/problems/palindrome-pairs/", "difficulty": "Hard", "reason": "Reverse-word trie to find palindrome-forming pairs" }
+  ],
+  "topic:union-find": [
+    { "title": "Number of Provinces", "platform": "LC", "url": "https://leetcode.com/problems/number-of-provinces/", "difficulty": "Medium", "reason": "Classic connected-components problem with union-find" },
+    { "title": "Largest Component Size by Common Factor", "platform": "LC", "url": "https://leetcode.com/problems/largest-component-size-by-common-factor/", "difficulty": "Hard", "reason": "Union numbers sharing a factor — union-find on prime factors" },
+    { "title": "Redundant Connection", "platform": "LC", "url": "https://leetcode.com/problems/redundant-connection/", "difficulty": "Medium", "reason": "Find the edge that creates a cycle using union-find" }
+  ],
+  "topic:matrices": [
+    { "title": "Spiral Matrix II", "platform": "LC", "url": "https://leetcode.com/problems/spiral-matrix-ii/", "difficulty": "Medium", "reason": "Fill a matrix in spiral order — inverse of spiral read" },
+    { "title": "Diagonal Traverse", "platform": "LC", "url": "https://leetcode.com/problems/diagonal-traverse/", "difficulty": "Medium", "reason": "Traverse matrix along diagonals with direction flip" },
+    { "title": "Set Matrix Zeroes", "platform": "LC", "url": "https://leetcode.com/problems/set-matrix-zeroes/", "difficulty": "Medium", "reason": "In-place zero propagation — row/column marking" },
+    { "title": "Rotate Image", "platform": "LC", "url": "https://leetcode.com/problems/rotate-image/", "difficulty": "Medium", "reason": "In-place 90-degree matrix rotation with transpose + reverse" }
+  ],
+  "topic:binary-search": [
+    { "title": "Aggressive Cows", "platform": "SPOJ", "url": "https://www.spoj.com/problems/AGGRCOW/", "difficulty": "Medium", "reason": "Classic binary search on answer — place cows maximising minimum distance" },
+    { "title": "Find Peak Element", "platform": "LC", "url": "https://leetcode.com/problems/find-peak-element/", "difficulty": "Medium", "reason": "Binary search on an unsorted array using local comparisons" },
+    { "title": "Median of Two Sorted Arrays", "platform": "LC", "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/", "difficulty": "Hard", "reason": "Binary search on partition position across two arrays" },
+    { "title": "Search in Rotated Sorted Array", "platform": "LC", "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/", "difficulty": "Medium", "reason": "Binary search with rotation pivot handling" }
+  ],
+  "topic:dynamic-programming": [
+    { "title": "0/1 Knapsack Problem", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/0-1-knapsack-problem/", "difficulty": "Medium", "reason": "Foundational DP — decide to include or exclude each item" },
+    { "title": "Longest Palindromic Subsequence", "platform": "LC", "url": "https://leetcode.com/problems/longest-palindromic-subsequence/", "difficulty": "Medium", "reason": "Interval DP — longest palindrome subsequence in a string" },
+    { "title": "Matrix Chain Multiplication", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/matrix-chain-multiplication/", "difficulty": "Hard", "reason": "Classic interval DP — optimise matrix multiplication order" },
+    { "title": "Rod Cutting", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/rod-cutting/", "difficulty": "Medium", "reason": "Unbounded knapsack variant — maximise revenue by cutting a rod" },
+    { "title": "Egg Drop Problem", "platform": "GFG", "url": "https://www.geeksforgeeks.org/problems/egg-drop-puzzle/", "difficulty": "Hard", "reason": "Classic DP / binary search puzzle — find critical floor with minimum trials" }
+  ],
+  "topic:bit-manipulation": [
+    { "title": "Power of Two", "platform": "LC", "url": "https://leetcode.com/problems/power-of-two/", "difficulty": "Easy", "reason": "Single bit trick: n & (n-1) == 0" },
+    { "title": "Bitwise AND of Numbers Range", "platform": "LC", "url": "https://leetcode.com/problems/bitwise-and-of-numbers-range/", "difficulty": "Medium", "reason": "Find common prefix of all numbers in range via bit shifting" },
+    { "title": "Total Hamming Distance", "platform": "LC", "url": "https://leetcode.com/problems/total-hamming-distance/", "difficulty": "Medium", "reason": "Per-bit counting of 0s and 1s across all pairs efficiently" }
+  ]
+}

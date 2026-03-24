@@ -1,0 +1,5 @@
+.row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 0; }
+.name { flex: 1; }
+.bar { width: 80px; height: 4px; background: var(--border); margin: 0 8px; }
+.fill { height: 100%; background: var(--fg-dim); }
+.pct { font-size: 11px; color: var(--fg-faint); width: 32px; text-align: right; }
