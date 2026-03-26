@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Contest } from "@/lib/types";
+import { getContests, addContest as storageAddContest, deleteContest as storageDeleteContest } from "@/lib/storage";
 import styles from "./Contests.module.css";
 
 const emptyContest: {
@@ -15,16 +16,17 @@ export default function ContestsPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyContest);
 
-  useEffect(() => { fetch("/api/contests").then((r) => r.json()).then(setContests); }, []);
+  useEffect(() => { setContests(getContests()); }, []);
 
-  const addContest = async () => {
-    const res = await fetch("/api/contests", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-    const created = await res.json();
-    setContests([created, ...contests]); setForm(emptyContest); setShowForm(false);
+  const handleAddContest = () => {
+    const created = storageAddContest(form as Omit<Contest, "id">);
+    setContests([created, ...contests.filter(c => c.id !== created.id)]);
+    setForm(emptyContest);
+    setShowForm(false);
   };
 
-  const deleteContest = async (id: string) => {
-    await fetch(`/api/contests/${id}`, { method: "DELETE" });
+  const handleDeleteContest = (id: string) => {
+    storageDeleteContest(id);
     setContests(contests.filter((c) => c.id !== id));
   };
 
@@ -55,7 +57,7 @@ export default function ContestsPage() {
             <input type="number" placeholder="Rating change (optional)" value={form.ratingChange || ""} onChange={(e) => setForm({ ...form, ratingChange: parseInt(e.target.value) || undefined })} />
           </div>
           <div className={styles.formActions}>
-            <button className="btn-primary" onClick={addContest}>Save Contest</button>
+            <button className="btn-primary" onClick={handleAddContest}>Save Contest</button>
             <button onClick={() => setShowForm(false)}>Cancel</button>
           </div>
         </div>
@@ -118,7 +120,7 @@ export default function ContestsPage() {
                   )}
                 </td>
                 <td>
-                  <button className={styles.deleteBtn} onClick={() => deleteContest(c.id)}>Delete</button>
+                  <button className={styles.deleteBtn} onClick={() => handleDeleteContest(c.id)}>Delete</button>
                 </td>
               </tr>
             ))}

@@ -10,6 +10,7 @@ import CompanyCoverage from "@/components/CompanyCoverage";
 import DifficultyTrend from "@/components/DifficultyTrend";
 import ProblemCard from "@/components/ProblemCard";
 import { ProblemProgress, EnrichedProblem } from "@/lib/types";
+import { getProgress, getStreaks, getSettings } from "@/lib/storage";
 import styles from "./Progress.module.css";
 
 interface SheetStats { name: string; totalProblems: number; solved: number; }
@@ -27,16 +28,42 @@ export default function ProgressPage() {
   const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
 
   useEffect(() => {
+    // Load user data from localStorage
+    const prog = getProgress();
+    const str = getStreaks();
+    const set = getSettings();
+    setProgress(prog);
+    setStreaks(str);
+    setSettings(set);
+
+    // Compute review due from progress
+    const today = new Date().toISOString().split("T")[0];
+    setReviewDue(Object.values(prog).filter((p) => p.status === "solved" && p.nextReview <= today));
+
+    // Load static data from API
     Promise.all([
-      fetch("/api/progress").then((r) => r.json()),
       fetch("/api/problems").then((r) => r.json()),
       fetch("/api/sheets").then((r) => r.json()),
       fetch("/api/topics").then((r) => r.json()),
-      fetch("/api/streaks").then((r) => r.json()),
-      fetch("/api/settings").then((r) => r.json()),
-      fetch("/api/review").then((r) => r.json()),
-    ]).then(([prog, prob, sh, top, str, set, rev]) => {
-      setProgress(prog); setProblems(prob); setSheets(sh); setTopics(top); setStreaks(str); setSettings(set); setReviewDue(rev);
+    ]).then(([prob, sh, top]) => {
+      setProblems(prob);
+      // Compute sheet stats with user progress
+      const sheetStats = sh.map((s: { name: string; problemIds: number[] }) => ({
+        name: s.name,
+        totalProblems: s.problemIds.length,
+        solved: s.problemIds.filter((id: number) => prog[id]?.status === "solved").length,
+      }));
+      setSheets(sheetStats);
+      // Compute topic stats with user progress
+      const topicStats = top.map((t: { id: string; name: string; prerequisites: string[]; problemIds: number[] }) => ({
+        id: t.id,
+        name: t.name,
+        prerequisites: t.prerequisites,
+        totalProblems: t.problemIds.length,
+        solved: t.problemIds.filter((id: number) => prog[id]?.status === "solved").length,
+        problemIds: t.problemIds,
+      }));
+      setTopics(topicStats);
     });
   }, []);
 

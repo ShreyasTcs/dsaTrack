@@ -4,7 +4,11 @@ import QueueList from "@/components/QueueList";
 import WorkspacePanel from "@/components/WorkspacePanel";
 import PrepModeBanner from "@/components/PrepModeBanner";
 import QuickLogModal from "@/components/QuickLogModal";
-import { QueueResponse, QueuedProblem } from "@/lib/types";
+import { enrichProblems } from "@/lib/enrichProblems";
+import { generateQueue } from "@/lib/queue";
+import { filterProblems } from "@/lib/api-helpers";
+import { getProgress, getStreaks, getSettings, putSettings } from "@/lib/storage";
+import { QueueResponse, QueuedProblem, EnrichedProblem, Topic, Sheet, Pattern } from "@/lib/types";
 
 type SessionStatus = "pending" | "active" | "done";
 
@@ -13,12 +17,99 @@ export default function TodayPage() {
   const [sessionStatus, setSessionStatus] = useState<Record<number, SessionStatus>>({});
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [showLog, setShowLog] = useState(false);
+  const [staticData, setStaticData] = useState<{ problems: EnrichedProblem[]; topics: Topic[]; sheets: Sheet[]; patterns: Pattern[] } | null>(null);
 
-  const loadQueue = useCallback(() => {
-    fetch("/api/queue").then((r) => r.json()).then(setData);
+  const loadQueue = useCallback((enriched?: EnrichedProblem[], tops?: Topic[], shs?: Sheet[]) => {
+    const progress = getProgress();
+    const settings = getSettings();
+    const streaks = getStreaks();
+    const today = new Date().toISOString().split("T")[0];
+
+    // Need static data
+    if (!enriched && !staticData) return;
+    const problems = enriched || staticData!.problems;
+    const topics = tops || staticData!.topics;
+    const sheets = shs || staticData!.sheets;
+
+    // Auto-deactivate Prep Mode if deadline passed or all done
+    if (settings.prepMode?.active) {
+      const deadline = new Date(settings.prepMode.deadline);
+      const now = new Date(today);
+      const daysLeft = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysLeft < 0) {
+        settings.prepMode.active = false;
+        putSettings(settings);
+      } else {
+        const raw = problems as EnrichedProblem[];
+        const targetSheet = settings.prepMode.sheet === "all"
+          ? null
+          : sheets.find((s) => s.id === settings.prepMode!.sheet);
+        const targetIds = targetSheet ? targetSheet.problemIds : raw.map((p) => p.id);
+        const matching = targetIds.filter((id) => {
+          const prob = raw.find((p) => p.id === id);
+          return prob && prob.companies.includes(settings.prepMode!.company);
+        });
+        const allSolved = matching.every((id) => progress[id]?.status === "solved");
+        if (allSolved && matching.length > 0) {
+          settings.prepMode.active = false;
+          putSettings(settings);
+        }
+      }
+    }
+
+    const { queue, adjustedGoal, reviewDueCount } = generateQueue({
+      problems, progress, topics, sheets, settings,
+    });
+
+    const queueProgress: Record<number, (typeof progress)[number]> = {};
+    for (const q of queue) {
+      if (progress[q.id]) queueProgress[q.id] = progress[q.id];
+    }
+
+    const todaySolved = streaks.activityLog[today] || 0;
+
+    let prepSolved = 0;
+    let prepTotal = 0;
+    if (settings.prepMode?.active) {
+      const targetSheet = settings.prepMode.sheet === "all"
+        ? null
+        : sheets.find((s) => s.id === settings.prepMode!.sheet);
+      const targetIds = targetSheet ? targetSheet.problemIds : problems.map((p) => p.id);
+      const matching = problems.filter(
+        (p) => targetIds.includes(p.id) && p.companies.includes(settings.prepMode!.company)
+      );
+      prepTotal = matching.length;
+      prepSolved = matching.filter((p) => progress[p.id]?.status === "solved").length;
+    }
+
+    setData({
+      queue,
+      progress: queueProgress,
+      stats: {
+        todaySolved,
+        dailyGoal: settings.dailyGoal,
+        adjustedGoal,
+        streak: streaks.currentStreak,
+        reviewDue: reviewDueCount,
+        prepMode: settings.prepMode?.active ? settings.prepMode : null,
+        prepSolved,
+        prepTotal,
+      },
+    });
+  }, [staticData]);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/problems").then((r) => r.json()),
+      fetch("/api/topics").then((r) => r.json()),
+      fetch("/api/sheets").then((r) => r.json()),
+      fetch("/api/patterns").then((r) => r.json()),
+    ]).then(([probs, tops, shs, pats]) => {
+      const enriched = enrichProblems(probs, tops, shs, pats);
+      setStaticData({ problems: enriched, topics: tops, sheets: shs, patterns: pats });
+      loadQueue(enriched, tops, shs);
+    });
   }, []);
-
-  useEffect(() => { loadQueue(); }, [loadQueue]);
 
   const handleSelect = (id: number) => {
     setSelectedId(id);
@@ -30,6 +121,7 @@ export default function TodayPage() {
       setSessionStatus((s) => ({ ...s, [selectedId]: s[selectedId] === "active" ? "pending" : s[selectedId] }));
     }
     setSelectedId(null);
+    loadQueue();
   };
 
   if (!data) return <div className="fg-faint">loading...</div>;
@@ -57,8 +149,12 @@ export default function TodayPage() {
 
       <div className="flex gap-8 mt-16">
         <button onClick={() => {
-          const params = new URLSearchParams();
-          fetch(`/api/random?${params}`).then((r) => r.ok ? r.json() : null).then((p) => { if (p) setSelectedId(p.id); });
+          if (!staticData) return;
+          const progress = getProgress();
+          const filtered = filterProblems(staticData.problems, progress, {});
+          if (filtered.length > 0) {
+            setSelectedId(filtered[Math.floor(Math.random() * filtered.length)].id);
+          }
         }}>random</button>
         <button onClick={() => setShowLog(true)}>log a solve</button>
       </div>

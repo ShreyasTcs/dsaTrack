@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./QuickLogModal.module.css";
+import { putProgress, getProgressById, getStreaks, putStreaks } from "@/lib/storage";
 
 interface Props { onClose: () => void; onSaved: () => void; }
 
@@ -13,22 +14,18 @@ export default function QuickLogModal({ onClose, onSaved }: Props) {
     fetch("/api/problems").then((r) => r.json()).then((p) => setProblems(p.map((x: { id: number; title: string }) => ({ id: x.id, title: x.title }))));
   }, []);
 
-  const save = async () => {
+  const save = () => {
     if (!problemId) return;
     const today = new Date().toLocaleDateString("en-CA");
-    const existing = await fetch(`/api/progress/${problemId}`).then((r) => r.ok ? r.json() : null);
-    await fetch(`/api/progress/${problemId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: "solved",
-        solveCount: (existing?.solveCount || 0) + 1,
-        lastSolved: today,
-        timesTaken: [...(existing?.timesTaken || []), time ? parseInt(time) : undefined].filter(Boolean),
-      }),
+    const existing = getProgressById(problemId);
+    putProgress(problemId, {
+      status: "solved",
+      solveCount: (existing?.solveCount || 0) + 1,
+      lastSolved: today,
+      timesTaken: [...(existing?.timesTaken || []), time ? parseInt(time) : undefined].filter(Boolean) as number[],
     });
     // Update streak
-    const streaks = await fetch("/api/streaks").then((r) => r.json());
+    const streaks = getStreaks();
     const todayCount = (streaks.activityLog[today] || 0) + 1;
     streaks.activityLog[today] = todayCount;
     if (todayCount === 1) {
@@ -38,7 +35,7 @@ export default function QuickLogModal({ onClose, onSaved }: Props) {
       streaks.currentStreak = streaks.activityLog[yStr] ? streaks.currentStreak + 1 : 1;
     }
     streaks.longestStreak = Math.max(streaks.longestStreak, streaks.currentStreak);
-    await fetch("/api/streaks", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(streaks) });
+    putStreaks(streaks);
     onSaved();
   };
 

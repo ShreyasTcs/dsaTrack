@@ -2,13 +2,18 @@ import fs from "fs";
 import path from "path";
 import { getStore } from "@netlify/blobs";
 
+// --- Static data imports (always available, bundled at build time) ---
+import problemsData from "../../data/problems.json";
+import topicsData from "../../data/topics.json";
+import sheetsData from "../../data/sheets.json";
+import patternsData from "../../data/patterns.json";
+import similarData from "../../data/similar.json";
+
 // --- Storage mode ---
-// Netlify: auto-detected via NETLIFY env var, uses built-in Blob storage (free, zero config)
-// Local: uses file system (data/*.json)
 const isNetlify = !!process.env.NETLIFY;
 const DATA_DIR = path.join(process.cwd(), "data");
 
-// --- Netlify Blobs helpers ---
+// --- Netlify Blobs (for user data: progress, streaks, contests, settings) ---
 function getBlobStore() {
   return getStore("dsa-data");
 }
@@ -24,11 +29,16 @@ async function blobRead<T>(key: string, fallback: T): Promise<T> {
 }
 
 async function blobWrite<T>(key: string, data: T): Promise<void> {
-  const store = getBlobStore();
-  await store.setJSON(key, data);
+  try {
+    const store = getBlobStore();
+    await store.setJSON(key, data);
+  } catch (err) {
+    console.error("[blobWrite] Failed to write", key, err);
+    throw err;
+  }
 }
 
-// --- File system helpers (local dev) ---
+// --- File system (local dev) ---
 const fileLocks: Record<string, Promise<void>> = {};
 
 function withLock<T>(file: string, fn: () => Promise<T>): Promise<T> {
@@ -63,7 +73,7 @@ async function fileWrite<T>(filename: string, data: T): Promise<void> {
   });
 }
 
-// --- Unified API ---
+// --- Unified read/write for user data ---
 export async function readJSON<T>(filename: string, fallback: T): Promise<T> {
   if (isNetlify) return blobRead(filename, fallback);
   return fileRead(filename, fallback);
@@ -74,17 +84,19 @@ export async function writeJSON<T>(filename: string, data: T): Promise<void> {
   return fileWrite(filename, data);
 }
 
-// --- Typed accessors ---
-export const readProblems = () => readJSON<import("./types").Problem[]>("problems.json", []);
+// --- Static data (read-only, bundled — works everywhere) ---
+export const readProblems = async () => problemsData as import("./types").Problem[];
+export const readSheets = async () => sheetsData as import("./types").Sheet[];
+export const readTopics = async () => topicsData as import("./types").Topic[];
+export const readPatterns = async () => patternsData as import("./types").Pattern[];
+export const readSimilar = async () => similarData as import("./types").SimilarProblems;
+
+// --- User data (read/write, persisted in blobs or filesystem) ---
 export const readProgress = () => readJSON<Record<number, import("./types").ProblemProgress>>("progress.json", {});
 export const writeProgress = (data: Record<number, import("./types").ProblemProgress>) => writeJSON("progress.json", data);
-export const readSheets = () => readJSON<import("./types").Sheet[]>("sheets.json", []);
-export const readTopics = () => readJSON<import("./types").Topic[]>("topics.json", []);
-export const readPatterns = () => readJSON<import("./types").Pattern[]>("patterns.json", []);
 export const readStreaks = () => readJSON<import("./types").StreakData>("streaks.json", { currentStreak: 0, longestStreak: 0, activityLog: {} });
 export const writeStreaks = (data: import("./types").StreakData) => writeJSON("streaks.json", data);
 export const readContests = () => readJSON<import("./types").Contest[]>("contests.json", []);
 export const writeContests = (data: import("./types").Contest[]) => writeJSON("contests.json", data);
 export const readSettings = () => readJSON<import("./types").Settings>("settings.json", { theme: "dark-minimal", dailyGoal: 3 });
 export const writeSettings = (data: import("./types").Settings) => writeJSON("settings.json", data);
-export const readSimilar = () => readJSON<import("./types").SimilarProblems>("similar.json", {});

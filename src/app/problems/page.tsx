@@ -5,6 +5,7 @@ import FilterBar from "@/components/FilterBar";
 import WorkspacePanel from "@/components/WorkspacePanel";
 import PrepModeBanner from "@/components/PrepModeBanner";
 import { EnrichedProblem, ProblemProgress, PrepMode } from "@/lib/types";
+import { getProgress, putProgress, getSettings } from "@/lib/storage";
 import styles from "./Problems.module.css";
 
 export default function ProblemsPage() {
@@ -25,21 +26,20 @@ export default function ProblemsPage() {
   useEffect(() => {
     Promise.all([
       fetch("/api/problems").then((r) => r.json()),
-      fetch("/api/progress").then((r) => r.json()),
       fetch("/api/topics").then((r) => r.json()),
       fetch("/api/sheets").then((r) => r.json()),
       fetch("/api/patterns").then((r) => r.json()),
-      fetch("/api/settings").then((r) => r.json()),
-    ]).then(([prob, prog, top, sh, pat, set]) => {
-      setProblems(prob); setProgress(prog);
+    ]).then(([prob, top, sh, pat]) => {
+      setProblems(prob);
       setTopics(top.map((t: { name: string }) => t.name));
       setSheets(sh.map((s: { id: string; name: string }) => ({ id: s.id, name: s.name })));
       setPatterns(pat.map((p: { name: string }) => p.name));
       const co = new Set<string>();
       prob.forEach((p: EnrichedProblem) => p.companies?.forEach((c: string) => co.add(c)));
       setCompanies([...co].sort());
-      setSettings(set);
     });
+    setProgress(getProgress());
+    setSettings(getSettings());
   }, []);
 
   const filtered = problems.filter((p) => {
@@ -69,19 +69,17 @@ export default function ProblemsPage() {
 
   const handleSort = (col: string) => { if (sortCol === col) setSortAsc(!sortAsc); else { setSortCol(col); setSortAsc(true); } };
 
-  const quickSolve = async (id: number) => {
+  const quickSolve = (id: number) => {
     const today = new Date().toLocaleDateString("en-CA");
     const existing = progress[id];
-    await fetch(`/api/progress/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: "solved", solveCount: (existing?.solveCount || 0) + 1, lastSolved: today }) });
-    const prog = await fetch("/api/progress").then((r) => r.json());
-    setProgress(prog);
+    putProgress(id, { status: "solved", solveCount: (existing?.solveCount || 0) + 1, lastSolved: today });
+    setProgress(getProgress());
   };
 
-  const toggleBookmark = async (id: number) => {
+  const toggleBookmark = (id: number) => {
     const existing = progress[id];
-    await fetch(`/api/progress/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ bookmarked: !existing?.bookmarked }) });
-    const prog = await fetch("/api/progress").then((r) => r.json());
-    setProgress(prog);
+    putProgress(id, { bookmarked: !existing?.bookmarked });
+    setProgress(getProgress());
   };
 
   const filterConfigs = [
@@ -92,64 +90,70 @@ export default function ProblemsPage() {
     { name: "status", placeholder: "Status", options: [{ label: "Solved", value: "solved" }, { label: "Unsolved", value: "unsolved" }, { label: "Review", value: "review" }, { label: "Bookmarked", value: "bookmarked" }] },
   ];
 
-  const prep = settings.prepMode?.active ? settings.prepMode : null;
-
   return (
     <div>
-      {prep && <PrepModeBanner prepMode={prep as PrepMode} solved={problems.filter((p) => p.companies.includes(prep.company) && progress[p.id]?.status === "solved").length} total={problems.filter((p) => p.companies.includes(prep.company)).length} />}
-      <div className="flex justify-between items-center mb-12">
-        <h1>problems <span className="fg-faint">({sorted.length})</span></h1>
+      {settings.prepMode?.active && (
+        <PrepModeBanner
+          prepMode={settings.prepMode as import("@/lib/types").PrepMode}
+          solved={problems.filter((p) => p.companies.includes(settings.prepMode!.company) && progress[p.id]?.status === "solved").length}
+          total={problems.filter((p) => p.companies.includes(settings.prepMode!.company)).length}
+        />
+      )}
+
+      <div className="flex justify-between items-center mb-16">
+        <h1>problems</h1>
+        <span className="fg-dim text-sm">{filtered.length} shown</span>
       </div>
 
-      <div className={styles.sheetChips}>
-        {sheets.map((s) => (
-          <button key={s.id} className={`${styles.sheetChip} ${activeSheet === s.name ? styles.sheetChipActive : ""}`} onClick={() => setActiveSheet(activeSheet === s.name ? "" : s.name)}>
-            {s.name}
-          </button>
-        ))}
-      </div>
-
-      <FilterBar filters={filterConfigs} values={filters} onFilter={(name, value) => setFilters((f) => ({ ...f, [name]: value }))} searchValue={search} onSearch={setSearch} />
-
-      <div className={styles.layout}>
-        <div className={selectedId ? styles.tableAreaCompressed : styles.tableArea}>
-          <table>
-            <thead><tr>
-              <th style={{ width: 30 }}></th>
-              <th className={styles.sortable} style={{ width: 50 }} onClick={() => handleSort("id")}># {sortCol === "id" ? (sortAsc ? "↑" : "↓") : ""}</th>
-              <th className={styles.sortable} onClick={() => handleSort("title")}>Title {sortCol === "title" ? (sortAsc ? "↑" : "↓") : ""}</th>
-              <th className={styles.sortable} style={{ width: 80 }} onClick={() => handleSort("difficulty")}>Diff</th>
-              <th style={{ width: 100 }}>Companies</th>
-              <th style={{ width: 70 }}>Last</th>
-              <th style={{ width: 50 }}></th>
-            </tr></thead>
-            <tbody>
-              {sorted.map((p) => {
-                const prog = progress[p.id];
-                const dotClass = prog?.status === "solved" ? "dot-solved" : prog?.status === "review" ? "dot-review" : "dot-unsolved";
-                return (
-                  <tr key={p.id}>
-                    <td><span className={`dot ${dotClass}`} /></td>
-                    <td className="fg-faint">{p.id}</td>
-                    <td><span className={styles.problemLink} style={{ cursor: "pointer" }} onClick={() => setSelectedId(p.id)}>{p.title}</span></td>
-                    <td><span className={`chip chip-${p.difficulty.toLowerCase()}`}>{p.difficulty}</span></td>
-                    <td className={styles.cellSmall}>{p.companies.slice(0, 2).join(", ")}</td>
-                    <td className={styles.cellSmall}>{prog?.lastSolved || "—"}</td>
-                    <td>
-                      <button className={styles.inlineAction} onClick={() => quickSolve(p.id)} title="Mark solved">✓</button>
-                      <button className={styles.inlineAction} onClick={() => toggleBookmark(p.id)} title="Bookmark">{prog?.bookmarked ? "★" : "☆"}</button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+      <div className="mb-16">
+        <input placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full mb-8" />
+        <FilterBar filters={filterConfigs} values={filters} onFilter={(name, value) => setFilters((f) => ({ ...f, [name]: value }))} />
+        <div className="flex gap-4 mt-8 flex-wrap">
+          <button className={`chip ${!activeSheet ? "chip-active" : ""}`} onClick={() => setActiveSheet("")}>All</button>
+          {sheets.map((s) => (
+            <button key={s.id} className={`chip ${activeSheet === s.name ? "chip-active" : ""}`} onClick={() => setActiveSheet(activeSheet === s.name ? "" : s.name)}>
+              {s.name}
+            </button>
+          ))}
         </div>
-
-        {selectedId && (
-          <WorkspacePanel problemId={selectedId} mode="inline" onClose={() => setSelectedId(null)} onNavigate={(id) => setSelectedId(id)} />
-        )}
       </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th onClick={() => handleSort("id")} style={{ cursor: "pointer" }}>#</th>
+            <th onClick={() => handleSort("title")} style={{ cursor: "pointer" }}>Title</th>
+            <th onClick={() => handleSort("difficulty")} style={{ cursor: "pointer" }}>Diff</th>
+            <th>Topics</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {sorted.map((p) => {
+            const prog = progress[p.id];
+            return (
+              <tr key={p.id} className={styles.row} onClick={() => setSelectedId(p.id)}>
+                <td className="fg-dim">{p.id}</td>
+                <td>
+                  <span className={prog?.status === "solved" ? styles.solved : prog?.status === "review" ? styles.review : ""}>
+                    {p.title}
+                  </span>
+                </td>
+                <td><span className={`chip chip-${p.difficulty.toLowerCase()}`}>{p.difficulty}</span></td>
+                <td className="fg-dim text-sm">{p.topics.slice(0, 2).join(", ")}</td>
+                <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
+                  <button className={styles.actionBtn} onClick={() => quickSolve(p.id)} title="Quick solve">✓</button>
+                  <button className={styles.actionBtn} onClick={() => toggleBookmark(p.id)} title="Bookmark">{prog?.bookmarked ? "★" : "☆"}</button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {selectedId && (
+        <WorkspacePanel problemId={selectedId} mode="overlay" onClose={() => { setSelectedId(null); setProgress(getProgress()); }} />
+      )}
     </div>
   );
 }

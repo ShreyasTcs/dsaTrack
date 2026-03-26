@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import ThemeSwitcher from "./ThemeSwitcher";
 import PrepModeModal from "./PrepModeModal";
 import styles from "./Navbar.module.css";
+import { getSettings } from "@/lib/storage";
 
 const links = [
   { href: "/", label: "Today" },
@@ -19,9 +20,8 @@ export default function Navbar() {
   const [prepActive, setPrepActive] = useState(false);
 
   useEffect(() => {
-    fetch("/api/settings").then((r) => r.json()).then((s) => {
-      setPrepActive(!!s.prepMode?.active);
-    }).catch(() => {});
+    const s = getSettings();
+    setPrepActive(!!s.prepMode?.active);
   }, []);
 
   return (

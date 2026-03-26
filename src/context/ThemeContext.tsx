@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { getSettings, putSettings } from "@/lib/storage";
 
 type Theme = "dark-minimal" | "colorful" | "professional";
 
@@ -18,10 +19,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark-minimal");
 
   useEffect(() => {
-    fetch("/api/settings")
-      .then((r) => r.json())
-      .then((s) => setTheme(s.theme || "dark-minimal"))
-      .catch(() => {});
+    const settings = getSettings();
+    setTheme(settings.theme || "dark-minimal");
   }, []);
 
   useEffect(() => {
@@ -30,11 +29,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const updateTheme = (newTheme: Theme) => {
     setTheme(newTheme);
-    fetch("/api/settings", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ theme: newTheme }),
-    }).catch(() => {});
+    putSettings({ theme: newTheme });
   };
 
   return (

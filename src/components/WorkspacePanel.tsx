@@ -4,6 +4,7 @@ import Timer from "./Timer";
 import styles from "./WorkspacePanel.module.css";
 import { EnrichedProblem, ProblemProgress, Approach, ExternalProblem } from "@/lib/types";
 import { calculateSM2 } from "@/lib/sm2";
+import { getProgressById, putProgress, getStreaks, putStreaks } from "@/lib/storage";
 
 interface Props {
   problemId: number;
@@ -23,40 +24,38 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate }:
 
   useEffect(() => {
     fetch(`/api/problems/${problemId}`).then((r) => r.json()).then(setProblem);
-    fetch(`/api/progress/${problemId}`).then((r) => { if (r.ok) return r.json(); return null; }).then((p) => {
-      if (p) { setProgress(p); setNotes(p.notes || ""); setPersonalDiff(p.personalDifficulty || 0); }
-    });
+    const p = getProgressById(problemId);
+    if (p) { setProgress(p); setNotes(p.notes || ""); setPersonalDiff(p.personalDifficulty || 0); }
     fetch(`/api/similar/${problemId}`).then((r) => r.json()).then(setExternalSimilar).catch(() => setExternalSimilar([]));
   }, [problemId]);
 
-  const saveProgress = async (updates: Partial<ProblemProgress>) => {
-    const res = await fetch(`/api/progress/${problemId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(updates) });
-    const updated = await res.json();
+  const saveProgress = (updates: Partial<ProblemProgress>) => {
+    const updated = putProgress(problemId, updates);
     setProgress(updated);
   };
 
-  const markSolved = async () => {
+  const markSolved = () => {
     const today = new Date().toLocaleDateString("en-CA");
-    await saveProgress({ status: "solved", solveCount: (progress?.solveCount || 0) + 1, lastSolved: today });
-    const streaks = await fetch("/api/streaks").then((r) => r.json());
+    saveProgress({ status: "solved", solveCount: (progress?.solveCount || 0) + 1, lastSolved: today });
+    const streaks = getStreaks();
     const todayCount = (streaks.activityLog[today] || 0) + 1;
     streaks.activityLog[today] = todayCount;
     const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
     const yStr = yesterday.toLocaleDateString("en-CA");
     if (streaks.activityLog[yStr] || todayCount > 1) { streaks.currentStreak = (streaks.currentStreak || 0) + (todayCount === 1 ? 1 : 0); } else if (todayCount === 1) { streaks.currentStreak = 1; }
     streaks.longestStreak = Math.max(streaks.longestStreak, streaks.currentStreak);
-    await fetch("/api/streaks", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(streaks) });
+    putStreaks(streaks);
   };
 
-  const handleReview = async (quality: number) => {
+  const handleReview = (quality: number) => {
     if (!progress) return;
     const result = calculateSM2(quality, progress.repetitions, progress.interval, progress.easeFactor);
-    await saveProgress({ ...result, status: quality >= 3 ? "solved" : "review" });
+    saveProgress({ ...result, status: quality >= 3 ? "solved" : "review" });
   };
 
-  const addApproach = async () => {
+  const addApproach = () => {
     if (!newApproach.name) return;
-    await saveProgress({ approaches: [...(progress?.approaches || []), newApproach] });
+    saveProgress({ approaches: [...(progress?.approaches || []), newApproach] });
     setNewApproach({ name: "", description: "", timeComplexity: "", spaceComplexity: "" });
     setShowApproachForm(false);
   };

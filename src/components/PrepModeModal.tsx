@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./PrepModeModal.module.css";
+import { getSettings, putSettings } from "@/lib/storage";
 
 interface Props { onClose: () => void; onSave: (active: boolean) => void; }
 
@@ -16,29 +17,23 @@ export default function PrepModeModal({ onClose, onSave }: Props) {
     Promise.all([
       fetch("/api/problems").then((r) => r.json()),
       fetch("/api/sheets").then((r) => r.json()),
-      fetch("/api/settings").then((r) => r.json()),
-    ]).then(([probs, sh, settings]) => {
+    ]).then(([probs, sh]) => {
       const co = new Set<string>();
       probs.forEach((p: { companies: string[] }) => p.companies.forEach((c: string) => co.add(c)));
       setCompanies([...co].sort());
       setSheets(sh.map((s: { id: string; name: string }) => ({ id: s.id, name: s.name })));
-      if (settings.prepMode) {
-        setCompany(settings.prepMode.company || "");
-        setSheet(settings.prepMode.sheet || "all");
-        setDeadline(settings.prepMode.deadline || "");
-        setIsActive(settings.prepMode.active || false);
-      }
     });
+    const settings = getSettings();
+    if (settings.prepMode) {
+      setCompany(settings.prepMode.company || "");
+      setSheet(settings.prepMode.sheet || "all");
+      setDeadline(settings.prepMode.deadline || "");
+      setIsActive(settings.prepMode.active || false);
+    }
   }, []);
 
-  const save = async (activate: boolean) => {
-    await fetch("/api/settings", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prepMode: { active: activate, company, sheet, deadline },
-      }),
-    });
+  const save = (activate: boolean) => {
+    putSettings({ prepMode: { active: activate, company, sheet, deadline } });
     onSave(activate);
   };
 
