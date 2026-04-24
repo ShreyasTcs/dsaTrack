@@ -5,7 +5,6 @@
  */
 
 import { ProblemProgress, StreakData, Contest, Settings } from "./types";
-import { getDefaultSM2Fields } from "./sm2";
 
 const KEYS = {
   progress: "dsa-progress",
@@ -47,7 +46,7 @@ export function putProgress(id: number, updates: Partial<ProblemProgress>): Prob
   const defaults: ProblemProgress = {
     problemId: id, status: "unsolved", personalDifficulty: 0, notes: "",
     approaches: [], timesTaken: [], bookmarked: false, solveCount: 0, lastSolved: "",
-    ...getDefaultSM2Fields(),
+    nextReview: "", interval: 0, easeFactor: 2.5, repetitions: 0,
   };
   progress[id] = { ...defaults, ...existing, ...updates, problemId: id };
   write(KEYS.progress, progress);

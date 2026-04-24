@@ -22,6 +22,7 @@ export default function QuickLogModal({ onClose, onSaved }: Props) {
       status: "solved",
       solveCount: (existing?.solveCount || 0) + 1,
       lastSolved: today,
+      nextReview: "",
       timesTaken: [...(existing?.timesTaken || []), time ? parseInt(time) : undefined].filter(Boolean) as number[],
     });
     // Update streak

@@ -11,9 +11,10 @@ interface Props {
   mode: "inline" | "overlay";
   onClose: () => void;
   onNavigate?: (id: number) => void;
+  onSolved?: (id: number) => void;
 }
 
-export default function WorkspacePanel({ problemId, mode, onClose, onNavigate }: Props) {
+export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, onSolved }: Props) {
   const [problem, setProblem] = useState<EnrichedProblem | null>(null);
   const [progress, setProgress] = useState<ProblemProgress | null>(null);
   const [notes, setNotes] = useState("");
@@ -36,7 +37,7 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate }:
 
   const markSolved = () => {
     const today = new Date().toLocaleDateString("en-CA");
-    saveProgress({ status: "solved", solveCount: (progress?.solveCount || 0) + 1, lastSolved: today });
+    saveProgress({ status: "solved", solveCount: (progress?.solveCount || 0) + 1, lastSolved: today, nextReview: "" });
     const streaks = getStreaks();
     const todayCount = (streaks.activityLog[today] || 0) + 1;
     streaks.activityLog[today] = todayCount;
@@ -45,6 +46,7 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate }:
     if (streaks.activityLog[yStr] || todayCount > 1) { streaks.currentStreak = (streaks.currentStreak || 0) + (todayCount === 1 ? 1 : 0); } else if (todayCount === 1) { streaks.currentStreak = 1; }
     streaks.longestStreak = Math.max(streaks.longestStreak, streaks.currentStreak);
     putStreaks(streaks);
+    onSolved?.(problemId);
   };
 
   const handleReview = (quality: number) => {
@@ -152,7 +154,10 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate }:
 
       <div className={styles.actions}>
         <button className="btn-primary" onClick={markSolved}>mark solved</button>
-        <button onClick={() => saveProgress({ status: "review" })}>add to review</button>
+        <button onClick={() => {
+          const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+          saveProgress({ status: "review", nextReview: tomorrow.toISOString().split("T")[0], interval: 1 });
+        }}>add to review</button>
         <button onClick={() => saveProgress({ bookmarked: !progress?.bookmarked })}>{progress?.bookmarked ? "★" : "☆"}</button>
         <a href={problem.url} target="_blank" rel="noopener noreferrer" className="btn">leetcode ↗</a>
       </div>

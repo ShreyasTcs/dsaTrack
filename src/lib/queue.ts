@@ -46,7 +46,7 @@ export function generateQueue(input: QueueInput): QueueOutput {
 
   // --- Priority 1: Overdue SM-2 reviews (sheet problems only) ---
   const reviewDue = Object.values(progress).filter(
-    (p) => p.status === "solved" && p.nextReview <= today && sheetProblemIds.has(p.problemId)
+    (p) => p.status === "solved" && !!p.nextReview && p.nextReview <= today && sheetProblemIds.has(p.problemId)
   );
   for (const r of reviewDue) {
     const prob = sheetProblems.find((p) => p.id === r.problemId);

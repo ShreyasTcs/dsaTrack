@@ -160,7 +160,10 @@ export default function TodayPage() {
       </div>
 
       {selectedId && (
-        <WorkspacePanel problemId={selectedId} mode="overlay" onClose={handlePanelClose} onNavigate={(id) => setSelectedId(id)} />
+        <WorkspacePanel problemId={selectedId} mode="overlay" onClose={handlePanelClose} onNavigate={(id) => setSelectedId(id)} onSolved={(id) => {
+          setSessionStatus((s) => ({ ...s, [id]: "done" }));
+          loadQueue();
+        }} />
       )}
 
       {showLog && (

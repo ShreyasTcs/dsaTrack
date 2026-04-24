@@ -6,6 +6,7 @@ import ThemeSwitcher from "./ThemeSwitcher";
 import PrepModeModal from "./PrepModeModal";
 import styles from "./Navbar.module.css";
 import { getSettings } from "@/lib/storage";
+import { useAuth } from "@/context/AuthContext";
 
 const links = [
   { href: "/", label: "Today" },
@@ -16,6 +17,7 @@ const links = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { logout } = useAuth();
   const [showPrepModal, setShowPrepModal] = useState(false);
   const [prepActive, setPrepActive] = useState(false);
 
@@ -28,7 +30,7 @@ export default function Navbar() {
     <>
       <nav style={{ borderBottom: "1px solid var(--border)" }}>
         <div className={styles.nav}>
-          <Link href="/" className={styles.logo}>dsa</Link>
+          <Link href="/" className={styles.logo}>DSA</Link>
           <div className={styles.links}>
             {links.map((l) => (
               <Link key={l.href} href={l.href} className={`${styles.link} ${pathname === l.href ? styles.active : ""}`}>
@@ -44,6 +46,7 @@ export default function Navbar() {
               {prepActive ? "\u25CF prep" : "prep"}
             </button>
             <ThemeSwitcher />
+            <button onClick={logout} className={styles.prepToggle}>logout</button>
           </div>
         </div>
       </nav>

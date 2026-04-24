@@ -38,7 +38,7 @@ export default function ProgressPage() {
 
     // Compute review due from progress
     const today = new Date().toISOString().split("T")[0];
-    setReviewDue(Object.values(prog).filter((p) => p.status === "solved" && p.nextReview <= today));
+    setReviewDue(Object.values(prog).filter((p) => p.status === "solved" && !!p.nextReview && p.nextReview <= today));
 
     // Load static data from API
     Promise.all([
@@ -120,6 +120,30 @@ export default function ProgressPage() {
 
           <h3>companies</h3>
           <CompanyCoverage problems={problems} progress={progress} />
+          <div className="divider" />
+
+          <h3>solve history</h3>
+          <div>
+            {(() => {
+              const solvedList = Object.values(progress)
+                .filter((p) => p.status === "solved" && p.lastSolved)
+                .sort((a, b) => b.lastSolved.localeCompare(a.lastSolved));
+              if (solvedList.length === 0) return <div className="fg-faint">No problems solved yet.</div>;
+              let currentDate = "";
+              return solvedList.map((p) => {
+                const prob = problems.find((pr) => pr.id === p.problemId);
+                if (!prob) return null;
+                const showDate = p.lastSolved !== currentDate;
+                if (showDate) currentDate = p.lastSolved;
+                return (
+                  <div key={p.problemId}>
+                    {showDate && <div className="fg-dim text-sm" style={{ marginTop: 12, marginBottom: 4 }}>{p.lastSolved}</div>}
+                    <ProblemCard id={prob.id} title={prob.title} difficulty={prob.difficulty} status={p.status} />
+                  </div>
+                );
+              });
+            })()}
+          </div>
         </div>
       )}
 
