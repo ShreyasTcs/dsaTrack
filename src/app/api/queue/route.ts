@@ -62,7 +62,7 @@ export async function GET() {
     }
   }
 
-  const { queue, adjustedGoal, reviewDueCount } = generateQueue({
+  const { queue, adjustedGoal, reviewDueCount, ratio } = generateQueue({
     problems: enriched,
     progress,
     topics,
@@ -107,6 +107,7 @@ export async function GET() {
       prepMode: settings.prepMode?.active ? settings.prepMode : null,
       prepSolved,
       prepTotal,
+      ratio,
     },
   };
 

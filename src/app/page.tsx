@@ -59,7 +59,7 @@ export default function TodayPage() {
       }
     }
 
-    const { queue, adjustedGoal, reviewDueCount } = generateQueue({
+    const { queue, adjustedGoal, reviewDueCount, ratio } = generateQueue({
       problems, progress, topics, sheets, settings,
     });
 
@@ -96,6 +96,7 @@ export default function TodayPage() {
         prepMode: settings.prepMode?.active ? settings.prepMode : null,
         prepSolved,
         prepTotal,
+        ratio,
       },
     });
   }, [staticData]);
@@ -131,19 +132,42 @@ export default function TodayPage() {
   const { queue, stats } = data;
   const todayDone = Object.values(sessionStatus).filter((s) => s === "done").length;
 
+  const updateGoal = (n: number) => {
+    if (!Number.isFinite(n) || n < 1) return;
+    putSettings({ dailyGoal: n });
+    loadQueue();
+  };
+
   return (
     <div>
       {stats.prepMode && (
         <PrepModeBanner prepMode={stats.prepMode} solved={stats.prepSolved} total={stats.prepTotal} />
       )}
 
-      <div className="flex justify-between items-center mb-16">
+      <div className="flex justify-between items-center mb-8">
         <h1>today</h1>
         <div className="flex gap-16 items-center">
           <span className="fg-dim text-sm">{stats.streak}d streak</span>
           <span className="text-sm">{stats.todaySolved + todayDone}/{stats.adjustedGoal} done</span>
           <Link href="/review" className="fg-dim text-sm">{stats.reviewDue} reviews</Link>
         </div>
+      </div>
+
+      <div className="flex gap-12 items-center mb-16 fg-dim text-sm">
+        <label className="flex gap-6 items-center">
+          goal
+          <input
+            type="number"
+            min={1}
+            value={stats.dailyGoal}
+            onChange={(e) => updateGoal(parseInt(e.target.value, 10))}
+            style={{ width: 56 }}
+          />
+        </label>
+        <span>= {stats.ratio.easy} easy · {stats.ratio.medium} medium · {stats.ratio.hard} hard</span>
+        {stats.adjustedGoal !== stats.dailyGoal && (
+          <span className="fg-faint">(prep bumped to {stats.adjustedGoal})</span>
+        )}
       </div>
 
       <h3>queue</h3>

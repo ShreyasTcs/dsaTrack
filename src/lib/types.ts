@@ -130,5 +130,6 @@ export interface QueueResponse {
     prepMode: PrepMode | null;
     prepSolved: number;
     prepTotal: number;
+    ratio: { easy: number; medium: number; hard: number };
   };
 }
