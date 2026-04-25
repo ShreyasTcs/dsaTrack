@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./QuickLogModal.module.css";
-import { putProgress, getProgressById, getStreaks, putStreaks } from "@/lib/storage";
+import { putProgress, getProgressById } from "@/lib/storage";
+import { recordSolve } from "@/lib/streaks";
+import { today, addDays } from "@/lib/dates";
 
 interface Props { onClose: () => void; onSaved: () => void; }
 
@@ -16,27 +18,19 @@ export default function QuickLogModal({ onClose, onSaved }: Props) {
 
   const save = () => {
     if (!problemId) return;
-    const today = new Date().toLocaleDateString("en-CA");
+    const t = today();
     const existing = getProgressById(problemId);
+    const prevInterval = existing?.interval ?? 0;
+    const newInterval = Math.max(1, prevInterval || 1);
     putProgress(problemId, {
       status: "solved",
       solveCount: (existing?.solveCount || 0) + 1,
-      lastSolved: today,
-      nextReview: "",
+      lastSolved: t,
+      nextReview: addDays(t, newInterval),
+      interval: newInterval,
       timesTaken: [...(existing?.timesTaken || []), time ? parseInt(time) : undefined].filter(Boolean) as number[],
     });
-    // Update streak
-    const streaks = getStreaks();
-    const todayCount = (streaks.activityLog[today] || 0) + 1;
-    streaks.activityLog[today] = todayCount;
-    if (todayCount === 1) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yStr = yesterday.toLocaleDateString("en-CA");
-      streaks.currentStreak = streaks.activityLog[yStr] ? streaks.currentStreak + 1 : 1;
-    }
-    streaks.longestStreak = Math.max(streaks.longestStreak, streaks.currentStreak);
-    putStreaks(streaks);
+    recordSolve();
     onSaved();
   };
 

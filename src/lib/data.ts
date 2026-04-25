@@ -98,5 +98,5 @@ export const readStreaks = () => readJSON<import("./types").StreakData>("streaks
 export const writeStreaks = (data: import("./types").StreakData) => writeJSON("streaks.json", data);
 export const readContests = () => readJSON<import("./types").Contest[]>("contests.json", []);
 export const writeContests = (data: import("./types").Contest[]) => writeJSON("contests.json", data);
-export const readSettings = () => readJSON<import("./types").Settings>("settings.json", { theme: "dark-minimal", dailyGoal: 3 });
+export const readSettings = () => readJSON<import("./types").Settings>("settings.json", { theme: "dark-minimal", dailyGoal: 3, reviewCap: 20 });
 export const writeSettings = (data: import("./types").Settings) => writeJSON("settings.json", data);

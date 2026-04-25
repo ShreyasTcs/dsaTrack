@@ -80,6 +80,7 @@ export interface Contest {
 export interface Settings {
   theme: "dark-minimal" | "colorful" | "professional";
   dailyGoal: number;
+  reviewCap: number;
   prepMode?: PrepMode;
 }
 

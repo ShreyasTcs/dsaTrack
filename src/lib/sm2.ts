@@ -1,3 +1,5 @@
+import { addDays, today } from "./dates";
+
 export interface SM2Result {
   interval: number;
   repetitions: number;
@@ -5,11 +7,33 @@ export interface SM2Result {
   nextReview: string;
 }
 
+export interface SM2State {
+  interval: number;
+  repetitions: number;
+  easeFactor: number;
+  personalDifficulty?: number;
+}
+
+const PERSONAL_DIFF_FACTOR: Record<number, number> = {
+  0: 1.0,
+  1: 1.3,
+  2: 1.1,
+  3: 1.0,
+  4: 0.75,
+  5: 0.6,
+};
+
+function applyPersonalDifficulty(interval: number, personalDifficulty: number): number {
+  const factor = PERSONAL_DIFF_FACTOR[personalDifficulty] ?? 1.0;
+  return Math.max(1, Math.round(interval * factor));
+}
+
 export function calculateSM2(
   quality: number,
   repetitions: number,
   interval: number,
-  easeFactor: number
+  easeFactor: number,
+  personalDifficulty: number = 0
 ): SM2Result {
   let newInterval: number;
   let newRepetitions: number;
@@ -28,22 +52,29 @@ export function calculateSM2(
   newEaseFactor = easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
   if (newEaseFactor < 1.3) newEaseFactor = 1.3;
 
-  const nextReview = new Date();
-  nextReview.setDate(nextReview.getDate() + newInterval);
+  newInterval = applyPersonalDifficulty(newInterval, personalDifficulty);
 
   return {
     interval: newInterval,
     repetitions: newRepetitions,
     easeFactor: Number(newEaseFactor.toFixed(2)),
-    nextReview: nextReview.toISOString().split("T")[0],
+    nextReview: addDays(today(), newInterval),
+  };
+}
+
+export function previewIntervals(state: SM2State): { again: number; hard: number; good: number; easy: number } {
+  const pd = state.personalDifficulty ?? 0;
+  return {
+    again: calculateSM2(1, state.repetitions, state.interval, state.easeFactor, pd).interval,
+    hard: calculateSM2(3, state.repetitions, state.interval, state.easeFactor, pd).interval,
+    good: calculateSM2(4, state.repetitions, state.interval, state.easeFactor, pd).interval,
+    easy: calculateSM2(5, state.repetitions, state.interval, state.easeFactor, pd).interval,
   };
 }
 
 export function getDefaultSM2Fields() {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
   return {
-    nextReview: tomorrow.toISOString().split("T")[0],
+    nextReview: addDays(today(), 1),
     interval: 1,
     easeFactor: 2.5,
     repetitions: 0,

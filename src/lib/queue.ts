@@ -5,8 +5,8 @@ import {
   Sheet,
   Settings,
   QueuedProblem,
-  PrepMode,
 } from "./types";
+import { today as todayStr } from "./dates";
 
 interface QueueInput {
   problems: EnrichedProblem[];
@@ -24,8 +24,9 @@ interface QueueOutput {
 
 export function generateQueue(input: QueueInput): QueueOutput {
   const { problems, progress, topics, sheets, settings } = input;
-  const today = new Date().toISOString().split("T")[0];
+  const today = todayStr();
   const dailyGoal = settings.dailyGoal;
+  const reviewCap = settings.reviewCap ?? 20;
   const prep = settings.prepMode?.active ? settings.prepMode : null;
 
   const queue: QueuedProblem[] = [];
@@ -44,10 +45,18 @@ export function generateQueue(input: QueueInput): QueueOutput {
     return !p || p.status === "unsolved";
   };
 
-  // --- Priority 1: Overdue SM-2 reviews (sheet problems only) ---
-  const reviewDue = Object.values(progress).filter(
-    (p) => p.status === "solved" && !!p.nextReview && p.nextReview <= today && sheetProblemIds.has(p.problemId)
-  );
+  // --- Priority 1: Overdue SM-2 reviews (sheet problems only, capped per day) ---
+  // Includes both "solved" (mature) and "review" (lapsed) cards. Oldest-due first.
+  const reviewDueAll = Object.values(progress)
+    .filter(
+      (p) =>
+        (p.status === "solved" || p.status === "review") &&
+        !!p.nextReview &&
+        p.nextReview <= today &&
+        sheetProblemIds.has(p.problemId)
+    )
+    .sort((a, b) => a.nextReview.localeCompare(b.nextReview));
+  const reviewDue = reviewDueAll.slice(0, reviewCap);
   for (const r of reviewDue) {
     const prob = sheetProblems.find((p) => p.id === r.problemId);
     if (prob) {

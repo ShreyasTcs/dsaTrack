@@ -11,6 +11,7 @@ import DifficultyTrend from "@/components/DifficultyTrend";
 import ProblemCard from "@/components/ProblemCard";
 import { ProblemProgress, EnrichedProblem } from "@/lib/types";
 import { getProgress, getStreaks, getSettings } from "@/lib/storage";
+import { today as todayStr } from "@/lib/dates";
 import styles from "./Progress.module.css";
 
 interface SheetStats { name: string; totalProblems: number; solved: number; }
@@ -37,8 +38,8 @@ export default function ProgressPage() {
     setSettings(set);
 
     // Compute review due from progress
-    const today = new Date().toISOString().split("T")[0];
-    setReviewDue(Object.values(prog).filter((p) => p.status === "solved" && !!p.nextReview && p.nextReview <= today));
+    const today = todayStr();
+    setReviewDue(Object.values(prog).filter((p) => (p.status === "solved" || p.status === "review") && !!p.nextReview && p.nextReview <= today));
 
     // Load static data from API
     Promise.all([

@@ -93,10 +93,11 @@ export function deleteContest(id: string): void {
 }
 
 // --- Settings ---
-const DEFAULT_SETTINGS: Settings = { theme: "dark-minimal", dailyGoal: 3 };
+const DEFAULT_SETTINGS: Settings = { theme: "dark-minimal", dailyGoal: 3, reviewCap: 20 };
 
 export function getSettings(): Settings {
-  return read(KEYS.settings, DEFAULT_SETTINGS);
+  const s = read(KEYS.settings, DEFAULT_SETTINGS);
+  return { ...DEFAULT_SETTINGS, ...s };
 }
 
 export function putSettings(updates: Partial<Settings>): Settings {

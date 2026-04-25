@@ -7,9 +7,14 @@
 .panelOverlay { position: relative; width: 420px; max-width: 90vw; background: var(--bg); border-left: 1px solid var(--border); padding: 16px; overflow-y: auto; animation: slideIn 200ms ease; }
 @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px; }
+.headerActions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .close { background: none; border: none; color: var(--fg-dim); cursor: pointer; font-size: 16px; font-family: inherit; }
 .close:hover { color: var(--fg); }
+.navBtn { background: none; border: 1px solid var(--border); color: var(--fg-dim); cursor: pointer; font-size: 14px; font-family: inherit; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; padding: 0; }
+.navBtn:hover:not(:disabled) { color: var(--fg); border-color: var(--fg-dim); }
+.navBtn:disabled { opacity: 0.3; cursor: default; }
+.navIdx { font-size: 11px; color: var(--fg-faint); padding: 0 4px; min-width: 32px; text-align: center; }
 .title { font-size: 15px; font-weight: 600; }
 .chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px; }
 .section { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }

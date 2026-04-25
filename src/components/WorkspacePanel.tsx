@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import Timer from "./Timer";
 import styles from "./WorkspacePanel.module.css";
 import { EnrichedProblem, ProblemProgress, Approach, ExternalProblem } from "@/lib/types";
-import { calculateSM2 } from "@/lib/sm2";
-import { getProgressById, putProgress, getStreaks, putStreaks } from "@/lib/storage";
+import { getProgressById, putProgress } from "@/lib/storage";
+import { recordSolve } from "@/lib/streaks";
+import { today, addDays } from "@/lib/dates";
 
 interface Props {
   problemId: number;
@@ -12,9 +13,11 @@ interface Props {
   onClose: () => void;
   onNavigate?: (id: number) => void;
   onSolved?: (id: number) => void;
+  // Optional ordered list of problem ids to enable prev/next navigation in the panel.
+  ids?: number[];
 }
 
-export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, onSolved }: Props) {
+export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, onSolved, ids }: Props) {
   const [problem, setProblem] = useState<EnrichedProblem | null>(null);
   const [progress, setProgress] = useState<ProblemProgress | null>(null);
   const [notes, setNotes] = useState("");
@@ -36,23 +39,20 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, o
   };
 
   const markSolved = () => {
-    const today = new Date().toLocaleDateString("en-CA");
-    saveProgress({ status: "solved", solveCount: (progress?.solveCount || 0) + 1, lastSolved: today, nextReview: "" });
-    const streaks = getStreaks();
-    const todayCount = (streaks.activityLog[today] || 0) + 1;
-    streaks.activityLog[today] = todayCount;
-    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-    const yStr = yesterday.toLocaleDateString("en-CA");
-    if (streaks.activityLog[yStr] || todayCount > 1) { streaks.currentStreak = (streaks.currentStreak || 0) + (todayCount === 1 ? 1 : 0); } else if (todayCount === 1) { streaks.currentStreak = 1; }
-    streaks.longestStreak = Math.max(streaks.longestStreak, streaks.currentStreak);
-    putStreaks(streaks);
+    const t = today();
+    // Schedule a first-review the day after solving without nuking SM-2 history.
+    // Re-solves of an already-mature card extend rather than reset the schedule.
+    const prevInterval = progress?.interval ?? 0;
+    const newInterval = Math.max(1, prevInterval || 1);
+    saveProgress({
+      status: "solved",
+      solveCount: (progress?.solveCount || 0) + 1,
+      lastSolved: t,
+      nextReview: addDays(t, newInterval),
+      interval: newInterval,
+    });
+    recordSolve();
     onSolved?.(problemId);
-  };
-
-  const handleReview = (quality: number) => {
-    if (!progress) return;
-    const result = calculateSM2(quality, progress.repetitions, progress.interval, progress.easeFactor);
-    saveProgress({ ...result, status: quality >= 3 ? "solved" : "review" });
   };
 
   const addApproach = () => {
@@ -64,6 +64,10 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, o
 
   if (!problem) return null;
 
+  const navIdx = ids && onNavigate ? ids.indexOf(problemId) : -1;
+  const prevId = navIdx > 0 ? ids![navIdx - 1] : null;
+  const nextId = navIdx >= 0 && navIdx < (ids?.length ?? 0) - 1 ? ids![navIdx + 1] : null;
+
   const panel = (
     <div className={mode === "inline" ? styles.panelInline : styles.panelOverlay}>
       <div className={styles.header}>
@@ -71,7 +75,16 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, o
           <div className={styles.title}>{problem.title}</div>
           <span className={`chip chip-${problem.difficulty.toLowerCase()}`}>{problem.difficulty}</span>
         </div>
-        <button className={styles.close} onClick={onClose}>×</button>
+        <div className={styles.headerActions}>
+          {navIdx >= 0 && (
+            <>
+              <button className={styles.navBtn} onClick={() => prevId != null && onNavigate?.(prevId)} disabled={prevId == null} title="Previous">‹</button>
+              <span className={styles.navIdx}>{navIdx + 1}/{ids!.length}</span>
+              <button className={styles.navBtn} onClick={() => nextId != null && onNavigate?.(nextId)} disabled={nextId == null} title="Next">›</button>
+            </>
+          )}
+          <button className={styles.close} onClick={onClose}>×</button>
+        </div>
       </div>
 
       <div className={styles.chips}>
@@ -130,13 +143,13 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, o
         ))}
       </div>
 
-      <div className={styles.section}>
-        <div className={styles.sectionTitle}>Review (0=forgot, 5=perfect)</div>
-        <div className={styles.reviewRow}>
-          {[0,1,2,3,4,5].map((q) => <button key={q} className={styles.reviewBtn} onClick={() => handleReview(q)}>{q}</button>)}
+      {progress?.nextReview && (
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Schedule</div>
+          <div className="fg-dim text-sm">Next review: {progress.nextReview} · {progress.interval}d</div>
+          <a href="/review" className="text-sm">grade in review →</a>
         </div>
-        {progress?.nextReview && <div className="fg-faint text-sm mt-8">Next: {progress.nextReview} · {progress.interval}d interval</div>}
-      </div>
+      )}
 
       {externalSimilar.length > 0 && (
         <div className={styles.section}>
@@ -154,10 +167,6 @@ export default function WorkspacePanel({ problemId, mode, onClose, onNavigate, o
 
       <div className={styles.actions}>
         <button className="btn-primary" onClick={markSolved}>mark solved</button>
-        <button onClick={() => {
-          const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-          saveProgress({ status: "review", nextReview: tomorrow.toISOString().split("T")[0], interval: 1 });
-        }}>add to review</button>
         <button onClick={() => saveProgress({ bookmarked: !progress?.bookmarked })}>{progress?.bookmarked ? "★" : "☆"}</button>
         <a href={problem.url} target="_blank" rel="noopener noreferrer" className="btn">leetcode ↗</a>
       </div>

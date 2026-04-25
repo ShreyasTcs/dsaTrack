@@ -1,4 +1,5 @@
 {
   "theme": "dark-minimal",
-  "dailyGoal": 3
+  "dailyGoal": 3,
+  "reviewCap": 20
 }

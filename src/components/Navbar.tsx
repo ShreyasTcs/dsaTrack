@@ -5,11 +5,14 @@ import { useState, useEffect } from "react";
 import ThemeSwitcher from "./ThemeSwitcher";
 import PrepModeModal from "./PrepModeModal";
 import styles from "./Navbar.module.css";
-import { getSettings } from "@/lib/storage";
+import { getSettings, getProgress } from "@/lib/storage";
+import { today } from "@/lib/dates";
+import { recomputeStreak } from "@/lib/streaks";
 import { useAuth } from "@/context/AuthContext";
 
 const links = [
   { href: "/", label: "Today" },
+  { href: "/review", label: "Review" },
   { href: "/problems", label: "Problems" },
   { href: "/progress", label: "Progress" },
   { href: "/contests", label: "Contests" },
@@ -20,11 +23,19 @@ export default function Navbar() {
   const { logout } = useAuth();
   const [showPrepModal, setShowPrepModal] = useState(false);
   const [prepActive, setPrepActive] = useState(false);
+  const [reviewsDue, setReviewsDue] = useState(0);
 
   useEffect(() => {
+    recomputeStreak();
     const s = getSettings();
     setPrepActive(!!s.prepMode?.active);
-  }, []);
+    const t = today();
+    const prog = getProgress();
+    const due = Object.values(prog).filter(
+      (p) => (p.status === "solved" || p.status === "review") && !!p.nextReview && p.nextReview <= t
+    ).length;
+    setReviewsDue(due);
+  }, [pathname]);
 
   return (
     <>
@@ -35,6 +46,7 @@ export default function Navbar() {
             {links.map((l) => (
               <Link key={l.href} href={l.href} className={`${styles.link} ${pathname === l.href ? styles.active : ""}`}>
                 {l.label}
+                {l.href === "/review" && reviewsDue > 0 && <span className={styles.linkBadge} title={`${reviewsDue} due`} />}
               </Link>
             ))}
           </div>
@@ -43,7 +55,7 @@ export default function Navbar() {
               className={`${styles.prepToggle} ${prepActive ? styles.prepActive : ""}`}
               onClick={() => setShowPrepModal(true)}
             >
-              {prepActive ? "\u25CF prep" : "prep"}
+              {prepActive ? "● prep" : "prep"}
             </button>
             <ThemeSwitcher />
             <button onClick={logout} className={styles.prepToggle}>logout</button>

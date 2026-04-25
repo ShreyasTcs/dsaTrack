@@ -152,7 +152,13 @@ export default function ProblemsPage() {
       </table>
 
       {selectedId && (
-        <WorkspacePanel problemId={selectedId} mode="overlay" onClose={() => { setSelectedId(null); setProgress(getProgress()); }} />
+        <WorkspacePanel
+          problemId={selectedId}
+          mode="overlay"
+          ids={sorted.map((p) => p.id)}
+          onNavigate={(id) => setSelectedId(id)}
+          onClose={() => { setSelectedId(null); setProgress(getProgress()); }}
+        />
       )}
     </div>
   );

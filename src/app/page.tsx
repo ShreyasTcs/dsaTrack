@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 import QueueList from "@/components/QueueList";
 import WorkspacePanel from "@/components/WorkspacePanel";
 import PrepModeBanner from "@/components/PrepModeBanner";
@@ -8,7 +9,8 @@ import { enrichProblems } from "@/lib/enrichProblems";
 import { generateQueue } from "@/lib/queue";
 import { filterProblems } from "@/lib/api-helpers";
 import { getProgress, getStreaks, getSettings, putSettings } from "@/lib/storage";
-import { QueueResponse, QueuedProblem, EnrichedProblem, Topic, Sheet, Pattern } from "@/lib/types";
+import { today as todayStr } from "@/lib/dates";
+import { QueueResponse, EnrichedProblem, Topic, Sheet, Pattern } from "@/lib/types";
 
 type SessionStatus = "pending" | "active" | "done";
 
@@ -23,7 +25,7 @@ export default function TodayPage() {
     const progress = getProgress();
     const settings = getSettings();
     const streaks = getStreaks();
-    const today = new Date().toISOString().split("T")[0];
+    const today = todayStr();
 
     // Need static data
     if (!enriched && !staticData) return;
@@ -140,7 +142,7 @@ export default function TodayPage() {
         <div className="flex gap-16 items-center">
           <span className="fg-dim text-sm">{stats.streak}d streak</span>
           <span className="text-sm">{stats.todaySolved + todayDone}/{stats.adjustedGoal} done</span>
-          <span className="fg-dim text-sm">{stats.reviewDue} reviews</span>
+          <Link href="/review" className="fg-dim text-sm">{stats.reviewDue} reviews</Link>
         </div>
       </div>
 
@@ -151,16 +153,21 @@ export default function TodayPage() {
         <button onClick={() => {
           if (!staticData) return;
           const progress = getProgress();
-          const filtered = filterProblems(staticData.problems, progress, {});
+          const filtered = filterProblems(staticData.problems, progress, { status: "unsolved" });
           if (filtered.length > 0) {
             setSelectedId(filtered[Math.floor(Math.random() * filtered.length)].id);
           }
-        }}>random</button>
+        }}>random unsolved</button>
         <button onClick={() => setShowLog(true)}>log a solve</button>
+        {stats.reviewDue > 0 && (
+          <Link href="/review" className="btn-primary" style={{ textDecoration: "none" }}>
+            start review ({stats.reviewDue})
+          </Link>
+        )}
       </div>
 
       {selectedId && (
-        <WorkspacePanel problemId={selectedId} mode="overlay" onClose={handlePanelClose} onNavigate={(id) => setSelectedId(id)} onSolved={(id) => {
+        <WorkspacePanel problemId={selectedId} mode="overlay" onClose={handlePanelClose} ids={queue.map((q) => q.id)} onNavigate={(id) => setSelectedId(id)} onSolved={(id) => {
           setSessionStatus((s) => ({ ...s, [id]: "done" }));
           loadQueue();
         }} />
