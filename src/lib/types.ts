@@ -115,7 +115,7 @@ export interface SimilarProblems {
 }
 
 export interface QueuedProblem extends EnrichedProblem {
-  reason: "review_due" | "prep_target" | "weak_topic" | "sheet_fill";
+  reason: "review_due" | "prep_target" | "topic_seq" | "sheet_fill";
 }
 
 export interface QueueResponse {

@@ -24,10 +24,9 @@ interface QueueOutput {
 }
 
 type Diff = "Easy" | "Medium" | "Hard";
-
 const DIFF_ORDER: Record<Diff, number> = { Easy: 0, Medium: 1, Hard: 2 };
 
-// Approximate 3:2:1 split. For n<6 use a deterministic table; above 6 scale by weight.
+// Approximate 3:2:1 split. For n<=6 use a deterministic table; above 6 scale by weight.
 export function splitByRatio(n: number): { easy: number; medium: number; hard: number } {
   if (n <= 0) return { easy: 0, medium: 0, hard: 0 };
   const table: Record<number, [number, number, number]> = {
@@ -48,54 +47,49 @@ export function splitByRatio(n: number): { easy: number; medium: number; hard: n
   return { easy, medium, hard: Math.max(0, hard) };
 }
 
-function diffOf(p: EnrichedProblem): Diff {
-  return p.difficulty;
+interface Candidate {
+  prob: EnrichedProblem;
+  reason: QueuedProblem["reason"];
 }
 
-// Pull up to `bucket[diff]` items from `pool` into `queue` with the given reason.
-// Items already in `usedIds` are skipped. Returns the leftover (unfilled) per bucket.
-function fillByBucket(
-  pool: EnrichedProblem[],
+// Strict pass: take items only if they fit a non-zero bucket slot of their own difficulty.
+function fillStrict(
+  pool: Candidate[],
   bucket: Record<Diff, number>,
-  reason: QueuedProblem["reason"],
   queue: QueuedProblem[],
   usedIds: Set<number>
-): Record<Diff, number> {
-  const remaining: Record<Diff, number> = { Easy: bucket.Easy, Medium: bucket.Medium, Hard: bucket.Hard };
-  for (const prob of pool) {
+): void {
+  for (const { prob, reason } of pool) {
     if (usedIds.has(prob.id)) continue;
-    const d = diffOf(prob);
-    if (remaining[d] > 0) {
+    const d = prob.difficulty as Diff;
+    if (bucket[d] > 0) {
       queue.push({ ...prob, reason });
       usedIds.add(prob.id);
-      remaining[d] -= 1;
+      bucket[d] -= 1;
     }
   }
-  // Spillover: if a bucket can't be filled, redistribute the deficit.
-  // Hard deficit -> Medium -> Easy. Medium deficit -> Easy -> Hard. Easy deficit -> Medium -> Hard.
-  const spillOrder: Record<Diff, Diff[]> = {
-    Hard: ["Medium", "Easy"],
-    Medium: ["Easy", "Hard"],
-    Easy: ["Medium", "Hard"],
-  };
-  const stillNeeded: Record<Diff, number> = { Easy: 0, Medium: 0, Hard: 0 };
-  for (const d of ["Easy", "Medium", "Hard"] as Diff[]) {
-    if (remaining[d] > 0) stillNeeded[d] = remaining[d];
+}
+
+// Spillover pass: top up to the total remaining slots regardless of difficulty.
+// Only runs after every priority pool has had a strict shot at the bucket.
+function fillSpillover(
+  pool: Candidate[],
+  bucket: Record<Diff, number>,
+  queue: QueuedProblem[],
+  usedIds: Set<number>
+): void {
+  let need = bucket.Easy + bucket.Medium + bucket.Hard;
+  if (need <= 0) return;
+  for (const { prob, reason } of pool) {
+    if (need <= 0) break;
+    if (usedIds.has(prob.id)) continue;
+    queue.push({ ...prob, reason });
+    usedIds.add(prob.id);
+    need -= 1;
   }
-  for (const d of ["Easy", "Medium", "Hard"] as Diff[]) {
-    if (stillNeeded[d] === 0) continue;
-    for (const fallback of spillOrder[d]) {
-      while (stillNeeded[d] > 0) {
-        const next = pool.find((p) => !usedIds.has(p.id) && diffOf(p) === fallback);
-        if (!next) break;
-        queue.push({ ...next, reason });
-        usedIds.add(next.id);
-        stillNeeded[d] -= 1;
-      }
-      if (stillNeeded[d] === 0) break;
-    }
-  }
-  return stillNeeded;
+  bucket.Easy = 0;
+  bucket.Medium = 0;
+  bucket.Hard = 0;
 }
 
 export function generateQueue(input: QueueInput): QueueOutput {
@@ -108,11 +102,8 @@ export function generateQueue(input: QueueInput): QueueOutput {
   const queue: QueuedProblem[] = [];
   const usedIds = new Set<number>();
 
-  // Only consider problems that belong to at least one sheet
   const sheetProblemIds = new Set<number>();
-  for (const s of sheets) {
-    for (const id of s.problemIds) sheetProblemIds.add(id);
-  }
+  for (const s of sheets) for (const id of s.problemIds) sheetProblemIds.add(id);
   const sheetProblems = problems.filter((p) => sheetProblemIds.has(p.id));
 
   const isUnsolved = (id: number) => {
@@ -140,23 +131,21 @@ export function generateQueue(input: QueueInput): QueueOutput {
   }
   const reviewDueCount = reviewDue.length;
 
-  // --- Adjust goal for Prep Mode ---
+  // --- Adjust goal for Prep Mode deadlines ---
   let adjustedGoal = dailyGoal;
   if (prep) {
     const targetSheet = prep.sheet === "all" ? null : sheets.find((s) => s.id === prep.sheet);
     const targetProblemIds = targetSheet ? targetSheet.problemIds : sheetProblems.map((p) => p.id);
-    const matching = sheetProblems.filter(
+    const remaining = sheetProblems.filter(
       (p) =>
         targetProblemIds.includes(p.id) &&
         p.companies.includes(prep.company) &&
         isUnsolved(p.id) &&
         !usedIds.has(p.id)
-    );
-    const remaining = matching.length;
+    ).length;
     const deadline = new Date(prep.deadline);
     const now = new Date(today);
     const daysLeft = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
     if (daysLeft > 0 && remaining > 0) {
       adjustedGoal = Math.max(dailyGoal, Math.ceil(remaining / daysLeft));
     } else if (daysLeft === 0 && remaining > 0) {
@@ -164,72 +153,73 @@ export function generateQueue(input: QueueInput): QueueOutput {
     }
   }
 
-  // --- Build target-by-difficulty bucket, then subtract reviews already pulled ---
+  // --- Bucket = ratio target minus reviews already pulled in their difficulty ---
   const split = splitByRatio(adjustedGoal);
-  const bucket: Record<Diff, number> = {
-    Easy: split.easy,
-    Medium: split.medium,
-    Hard: split.hard,
-  };
+  const bucket: Record<Diff, number> = { Easy: split.easy, Medium: split.medium, Hard: split.hard };
   for (const r of reviewDue) {
     const prob = sheetProblems.find((p) => p.id === r.problemId);
     if (!prob) continue;
-    const d = diffOf(prob);
+    const d = prob.difficulty as Diff;
     if (bucket[d] > 0) bucket[d] -= 1;
   }
 
-  // --- Build candidate pool (per-priority), then fill the bucket ---
+  // --- Build candidate pools ---
+  const candidates: Candidate[] = [];
+
   if (prep) {
+    // Prep mode: target company + sheet, sorted Easy -> Hard.
     const targetSheet = prep.sheet === "all" ? null : sheets.find((s) => s.id === prep.sheet);
     const targetProblemIds = targetSheet ? targetSheet.problemIds : sheetProblems.map((p) => p.id);
-    const pool = sheetProblems.filter(
-      (p) =>
-        targetProblemIds.includes(p.id) &&
-        p.companies.includes(prep.company) &&
-        isUnsolved(p.id) &&
-        !usedIds.has(p.id)
-    );
-    fillByBucket(pool, bucket, "prep_target", queue, usedIds);
-  } else {
-    // Priority 2: weak topics
-    const topicStats = topics.map((t) => {
-      const sheetIds = t.problemIds.filter((id) => sheetProblemIds.has(id));
-      const solved = sheetIds.filter((id) => progress[id]?.status === "solved").length;
-      return { ...t, sheetIds, solved, total: sheetIds.length, pct: sheetIds.length > 0 ? solved / sheetIds.length : 1 };
-    });
-    const weak = topicStats
-      .filter((t) => t.pct < 1 && t.sheetIds.some((id) => isUnsolved(id) && !usedIds.has(id)))
-      .sort((a, b) => a.pct - b.pct || b.total - a.total)
-      .slice(0, 3);
-    const weakIds = new Set<number>();
-    for (const t of weak) for (const id of t.sheetIds) weakIds.add(id);
-    const weakPool = sheetProblems
-      .filter((p) => weakIds.has(p.id) && isUnsolved(p.id) && !usedIds.has(p.id))
+    const prepPool = sheetProblems
+      .filter(
+        (p) =>
+          targetProblemIds.includes(p.id) &&
+          p.companies.includes(prep.company) &&
+          isUnsolved(p.id) &&
+          !usedIds.has(p.id)
+      )
       .sort((a, b) => DIFF_ORDER[a.difficulty] - DIFF_ORDER[b.difficulty]);
-    const stillNeeded = fillByBucket(weakPool, bucket, "weak_topic", queue, usedIds);
-
-    // Priority 3: fill from most-progressed sheet
-    const totalLeft = stillNeeded.Easy + stillNeeded.Medium + stillNeeded.Hard;
-    if (totalLeft > 0) {
-      const sheetStats = sheets.map((s) => {
+    for (const p of prepPool) candidates.push({ prob: p, reason: "prep_target" });
+  } else {
+    // Default mode: walk topics in `order`, then within each topic Easy -> Medium -> Hard.
+    // This makes the queue progress topic-by-topic (Arrays first, then Strings, ...).
+    const orderedTopics = [...topics].sort((a, b) => a.order - b.order);
+    const seen = new Set<number>();
+    for (const topic of orderedTopics) {
+      const topicProbs = topic.problemIds
+        .map((id) => sheetProblems.find((p) => p.id === id))
+        .filter((p): p is EnrichedProblem => !!p && isUnsolved(p.id) && !usedIds.has(p.id) && !seen.has(p.id))
+        .sort((a, b) => DIFF_ORDER[a.difficulty] - DIFF_ORDER[b.difficulty]);
+      for (const p of topicProbs) {
+        seen.add(p.id);
+        candidates.push({ prob: p, reason: "topic_seq" });
+      }
+    }
+    // Fallback: any sheet problem not in any topic, ordered by sheet completion.
+    const sheetStats = sheets
+      .map((s) => {
         const solved = s.problemIds.filter((id) => progress[id]?.status === "solved").length;
-        return { ...s, solved, total: s.problemIds.length, pct: s.problemIds.length > 0 ? solved / s.problemIds.length : 0 };
-      });
-      const bestSheet = sheetStats.filter((s) => s.pct < 1).sort((a, b) => b.pct - a.pct)[0];
-      if (bestSheet) {
-        const fillPool = bestSheet.problemIds
-          .map((id) => sheetProblems.find((p) => p.id === id))
-          .filter((p): p is EnrichedProblem => !!p && isUnsolved(p.id) && !usedIds.has(p.id))
-          .sort((a, b) => DIFF_ORDER[a.difficulty] - DIFF_ORDER[b.difficulty]);
-        fillByBucket(fillPool, stillNeeded, "sheet_fill", queue, usedIds);
+        return { ...s, pct: s.problemIds.length > 0 ? solved / s.problemIds.length : 0 };
+      })
+      .filter((s) => s.pct < 1)
+      .sort((a, b) => b.pct - a.pct);
+    for (const s of sheetStats) {
+      for (const id of s.problemIds) {
+        if (seen.has(id)) continue;
+        const prob = sheetProblems.find((p) => p.id === id);
+        if (prob && isUnsolved(prob.id) && !usedIds.has(prob.id)) {
+          seen.add(prob.id);
+          candidates.push({ prob, reason: "sheet_fill" });
+        }
       }
     }
   }
 
-  return {
-    queue,
-    adjustedGoal,
-    reviewDueCount,
-    ratio: split,
-  };
+  // Strict pass first: respects the 3:2:1 buckets.
+  fillStrict(candidates, bucket, queue, usedIds);
+  // Spillover only after the strict pass, so unsatisfied buckets get topped up
+  // from any difficulty rather than letting earlier pools run away with the slots.
+  fillSpillover(candidates, bucket, queue, usedIds);
+
+  return { queue, adjustedGoal, reviewDueCount, ratio: split };
 }

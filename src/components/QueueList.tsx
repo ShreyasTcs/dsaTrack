@@ -12,7 +12,7 @@ interface Props {
 const reasonLabels: Record<string, string> = {
   review_due: "review due",
   prep_target: "prep target",
-  weak_topic: "weak topic",
+  topic_seq: "current topic",
   sheet_fill: "sheet progress",
 };
 
