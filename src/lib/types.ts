@@ -118,6 +118,13 @@ export interface QueuedProblem extends EnrichedProblem {
   reason: "review_due" | "prep_target" | "topic_seq" | "sheet_fill";
 }
 
+export interface DailyPlan {
+  date: string;
+  goal: number;
+  ratio: { easy: number; medium: number; hard: number };
+  mainIds: number[];
+}
+
 export interface QueueResponse {
   queue: QueuedProblem[];
   progress: Record<number, ProblemProgress>;

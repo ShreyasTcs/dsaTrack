@@ -8,7 +8,15 @@ import QuickLogModal from "@/components/QuickLogModal";
 import { enrichProblems } from "@/lib/enrichProblems";
 import { generateQueue } from "@/lib/queue";
 import { filterProblems } from "@/lib/api-helpers";
-import { getProgress, getStreaks, getSettings, putSettings } from "@/lib/storage";
+import {
+  getProgress,
+  getStreaks,
+  getSettings,
+  putSettings,
+  getDailyPlan,
+  putDailyPlan,
+  clearDailyPlan,
+} from "@/lib/storage";
 import { today as todayStr } from "@/lib/dates";
 import { QueueResponse, EnrichedProblem, Topic, Sheet, Pattern } from "@/lib/types";
 
@@ -20,20 +28,28 @@ export default function TodayPage() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [showLog, setShowLog] = useState(false);
   const [staticData, setStaticData] = useState<{ problems: EnrichedProblem[]; topics: Topic[]; sheets: Sheet[]; patterns: Pattern[] } | null>(null);
+  const [goalInput, setGoalInput] = useState<string>("");
+  const [planGoal, setPlanGoal] = useState<number>(0);
 
-  const loadQueue = useCallback((enriched?: EnrichedProblem[], tops?: Topic[], shs?: Sheet[]) => {
+  // forceRegenerate=true clears any saved plan and rebuilds (used when the user
+  // edits the goal or clicks the regenerate button). Otherwise, an existing
+  // plan for today is reused so reloads don't reshuffle the queue.
+  const loadQueue = useCallback((opts?: { forceRegenerate?: boolean; enriched?: EnrichedProblem[]; tops?: Topic[]; shs?: Sheet[] }) => {
+    const force = opts?.forceRegenerate ?? false;
+    const enriched = opts?.enriched;
+    const tops = opts?.tops;
+    const shs = opts?.shs;
+
     const progress = getProgress();
     const settings = getSettings();
     const streaks = getStreaks();
     const today = todayStr();
 
-    // Need static data
     if (!enriched && !staticData) return;
     const problems = enriched || staticData!.problems;
     const topics = tops || staticData!.topics;
     const sheets = shs || staticData!.sheets;
 
-    // Auto-deactivate Prep Mode if deadline passed or all done
     if (settings.prepMode?.active) {
       const deadline = new Date(settings.prepMode.deadline);
       const now = new Date(today);
@@ -59,9 +75,39 @@ export default function TodayPage() {
       }
     }
 
-    const { queue, adjustedGoal, reviewDueCount, ratio } = generateQueue({
-      problems, progress, topics, sheets, settings,
+    if (force) clearDailyPlan();
+
+    const existingPlan = getDailyPlan();
+    const planForToday = existingPlan && existingPlan.date === today ? existingPlan : null;
+
+    const result = generateQueue({
+      problems,
+      progress,
+      topics,
+      sheets,
+      settings,
+      lockedMainIds: planForToday?.mainIds,
     });
+
+    let { queue, adjustedGoal, reviewDueCount, ratio } = result;
+
+    // First time today (no plan, or stale plan): persist what was just generated.
+    // Re-roll case (force): same — overwrite.
+    if (!planForToday) {
+      const plan = {
+        date: today,
+        goal: settings.dailyGoal,
+        ratio,
+        mainIds: result.mainIds,
+      };
+      putDailyPlan(plan);
+      setPlanGoal(plan.goal);
+    } else {
+      // Use the plan's goal/ratio for display so the header is stable.
+      adjustedGoal = planForToday.goal;
+      ratio = planForToday.ratio;
+      setPlanGoal(planForToday.goal);
+    }
 
     const queueProgress: Record<number, (typeof progress)[number]> = {};
     for (const q of queue) {
@@ -99,6 +145,7 @@ export default function TodayPage() {
         ratio,
       },
     });
+    setGoalInput(String(settings.dailyGoal));
   }, [staticData]);
 
   useEffect(() => {
@@ -110,7 +157,7 @@ export default function TodayPage() {
     ]).then(([probs, tops, shs, pats]) => {
       const enriched = enrichProblems(probs, tops, shs, pats);
       setStaticData({ problems: enriched, topics: tops, sheets: shs, patterns: pats });
-      loadQueue(enriched, tops, shs);
+      loadQueue({ enriched, tops, shs });
     });
   }, []);
 
@@ -132,10 +179,15 @@ export default function TodayPage() {
   const { queue, stats } = data;
   const todayDone = Object.values(sessionStatus).filter((s) => s === "done").length;
 
-  const updateGoal = (n: number) => {
-    if (!Number.isFinite(n) || n < 1) return;
+  const applyGoal = (force = false) => {
+    const n = parseInt(goalInput, 10);
+    if (!Number.isFinite(n) || n < 1) {
+      setGoalInput(String(stats.dailyGoal));
+      return;
+    }
+    if (!force && n === stats.dailyGoal) return;
     putSettings({ dailyGoal: n });
-    loadQueue();
+    loadQueue({ forceRegenerate: true });
   };
 
   return (
@@ -148,7 +200,7 @@ export default function TodayPage() {
         <h1>today</h1>
         <div className="flex gap-16 items-center">
           <span className="fg-dim text-sm">{stats.streak}d streak</span>
-          <span className="text-sm">{stats.todaySolved + todayDone}/{stats.adjustedGoal} done</span>
+          <span className="text-sm">{stats.todaySolved + todayDone}/{planGoal || stats.adjustedGoal} done</span>
           <Link href="/review" className="fg-dim text-sm">{stats.reviewDue} reviews</Link>
         </div>
       </div>
@@ -159,11 +211,23 @@ export default function TodayPage() {
           <input
             type="number"
             min={1}
-            value={stats.dailyGoal}
-            onChange={(e) => updateGoal(parseInt(e.target.value, 10))}
+            value={goalInput}
+            onChange={(e) => setGoalInput(e.target.value)}
+            onBlur={() => applyGoal(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+              if (e.key === "Escape") setGoalInput(String(stats.dailyGoal));
+            }}
             style={{ width: 56 }}
           />
         </label>
+        <button
+          onClick={() => applyGoal(true)}
+          title="regenerate today's queue"
+          style={{ padding: "2px 8px", fontSize: 12 }}
+        >
+          ↻ regenerate
+        </button>
         <span>= {stats.ratio.easy} easy · {stats.ratio.medium} medium · {stats.ratio.hard} hard</span>
         {stats.adjustedGoal !== stats.dailyGoal && (
           <span className="fg-faint">(prep bumped to {stats.adjustedGoal})</span>

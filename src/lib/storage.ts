@@ -4,13 +4,14 @@
  * Static data (problems, topics, sheets, patterns) still comes from API routes.
  */
 
-import { ProblemProgress, StreakData, Contest, Settings } from "./types";
+import { ProblemProgress, StreakData, Contest, Settings, DailyPlan } from "./types";
 
 const KEYS = {
   progress: "dsa-progress",
   streaks: "dsa-streaks",
   contests: "dsa-contests",
   settings: "dsa-settings",
+  dailyPlan: "dsa-daily-plan",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -105,6 +106,20 @@ export function putSettings(updates: Partial<Settings>): Settings {
   const updated = { ...current, ...updates };
   write(KEYS.settings, updated);
   return updated;
+}
+
+// --- Daily Plan ---
+export function getDailyPlan(): DailyPlan | null {
+  return read<DailyPlan | null>(KEYS.dailyPlan, null);
+}
+
+export function putDailyPlan(plan: DailyPlan): void {
+  write(KEYS.dailyPlan, plan);
+}
+
+export function clearDailyPlan(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(KEYS.dailyPlan);
 }
 
 // --- Export / Import ---

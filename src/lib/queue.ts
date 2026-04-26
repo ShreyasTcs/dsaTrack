@@ -14,6 +14,10 @@ interface QueueInput {
   topics: Topic[];
   sheets: Sheet[];
   settings: Settings;
+  // If provided, the main (non-review) portion of the queue is locked to these
+  // ids in original order, filtered to still-unsolved. Bypasses topic walk and
+  // bucket logic. Used to keep today's plan stable across reloads.
+  lockedMainIds?: number[];
 }
 
 interface QueueOutput {
@@ -21,6 +25,9 @@ interface QueueOutput {
   adjustedGoal: number;
   reviewDueCount: number;
   ratio: { easy: number; medium: number; hard: number };
+  // Ordered list of non-review problem ids picked for today (the "main" set).
+  // Caller persists this as the day's plan.
+  mainIds: number[];
 }
 
 type Diff = "Easy" | "Medium" | "Hard";
@@ -93,7 +100,7 @@ function fillSpillover(
 }
 
 export function generateQueue(input: QueueInput): QueueOutput {
-  const { problems, progress, topics, sheets, settings } = input;
+  const { problems, progress, topics, sheets, settings, lockedMainIds } = input;
   const today = todayStr();
   const dailyGoal = Math.max(1, settings.dailyGoal || 1);
   const reviewCap = settings.reviewCap ?? 20;
@@ -151,6 +158,23 @@ export function generateQueue(input: QueueInput): QueueOutput {
     } else if (daysLeft === 0 && remaining > 0) {
       adjustedGoal = remaining;
     }
+  }
+
+  // --- Locked mode: the main set is fixed. Just show what's left, in order. ---
+  if (lockedMainIds && lockedMainIds.length > 0) {
+    const split = splitByRatio(adjustedGoal);
+    const mainIds: number[] = [];
+    for (const id of lockedMainIds) {
+      if (usedIds.has(id)) continue; // already pulled as a review
+      if (!isUnsolved(id)) continue;
+      const prob = sheetProblems.find((p) => p.id === id);
+      if (prob) {
+        queue.push({ ...prob, reason: "topic_seq" });
+        usedIds.add(prob.id);
+        mainIds.push(id);
+      }
+    }
+    return { queue, adjustedGoal, reviewDueCount, ratio: split, mainIds };
   }
 
   // --- Bucket = ratio target minus reviews already pulled in their difficulty ---
@@ -221,5 +245,6 @@ export function generateQueue(input: QueueInput): QueueOutput {
   // from any difficulty rather than letting earlier pools run away with the slots.
   fillSpillover(candidates, bucket, queue, usedIds);
 
-  return { queue, adjustedGoal, reviewDueCount, ratio: split };
+  const mainIds = queue.filter((q) => q.reason !== "review_due").map((q) => q.id);
+  return { queue, adjustedGoal, reviewDueCount, ratio: split, mainIds };
 }
