@@ -118,25 +118,17 @@ export function generateQueue(input: QueueInput): QueueOutput {
     return !p || p.status === "unsolved";
   };
 
-  // --- Priority 1: Overdue SM-2 reviews (oldest first, capped) ---
-  const reviewDueAll = Object.values(progress)
-    .filter(
-      (p) =>
-        (p.status === "solved" || p.status === "review") &&
-        !!p.nextReview &&
-        p.nextReview <= today &&
-        sheetProblemIds.has(p.problemId)
-    )
-    .sort((a, b) => a.nextReview.localeCompare(b.nextReview));
-  const reviewDue = reviewDueAll.slice(0, reviewCap);
-  for (const r of reviewDue) {
-    const prob = sheetProblems.find((p) => p.id === r.problemId);
-    if (prob) {
-      queue.push({ ...prob, reason: "review_due" });
-      usedIds.add(prob.id);
-    }
-  }
-  const reviewDueCount = reviewDue.length;
+  // --- Reviews are tracked here for the badge / CTA only, NOT added to today's
+  // queue. They live on the /review page. The main queue is exclusively topic
+  // problems sized to the goal.
+  const reviewDueAll = Object.values(progress).filter(
+    (p) =>
+      (p.status === "solved" || p.status === "review") &&
+      !!p.nextReview &&
+      p.nextReview <= today &&
+      sheetProblemIds.has(p.problemId)
+  );
+  const reviewDueCount = Math.min(reviewDueAll.length, reviewCap);
 
   // --- Adjust goal for Prep Mode deadlines ---
   let adjustedGoal = dailyGoal;
@@ -165,7 +157,6 @@ export function generateQueue(input: QueueInput): QueueOutput {
     const split = splitByRatio(adjustedGoal);
     const mainIds: number[] = [];
     for (const id of lockedMainIds) {
-      if (usedIds.has(id)) continue; // already pulled as a review
       if (!isUnsolved(id)) continue;
       const prob = sheetProblems.find((p) => p.id === id);
       if (prob) {
@@ -177,15 +168,9 @@ export function generateQueue(input: QueueInput): QueueOutput {
     return { queue, adjustedGoal, reviewDueCount, ratio: split, mainIds };
   }
 
-  // --- Bucket = ratio target minus reviews already pulled in their difficulty ---
+  // --- Bucket = full ratio target. Reviews don't consume goal slots. ---
   const split = splitByRatio(adjustedGoal);
   const bucket: Record<Diff, number> = { Easy: split.easy, Medium: split.medium, Hard: split.hard };
-  for (const r of reviewDue) {
-    const prob = sheetProblems.find((p) => p.id === r.problemId);
-    if (!prob) continue;
-    const d = prob.difficulty as Diff;
-    if (bucket[d] > 0) bucket[d] -= 1;
-  }
 
   // --- Build candidate pools ---
   const candidates: Candidate[] = [];
@@ -245,6 +230,6 @@ export function generateQueue(input: QueueInput): QueueOutput {
   // from any difficulty rather than letting earlier pools run away with the slots.
   fillSpillover(candidates, bucket, queue, usedIds);
 
-  const mainIds = queue.filter((q) => q.reason !== "review_due").map((q) => q.id);
+  const mainIds = queue.map((q) => q.id);
   return { queue, adjustedGoal, reviewDueCount, ratio: split, mainIds };
 }

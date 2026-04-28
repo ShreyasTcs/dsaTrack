@@ -30,6 +30,7 @@ export default function TodayPage() {
   const [staticData, setStaticData] = useState<{ problems: EnrichedProblem[]; topics: Topic[]; sheets: Sheet[]; patterns: Pattern[] } | null>(null);
   const [goalInput, setGoalInput] = useState<string>("");
   const [planGoal, setPlanGoal] = useState<number>(0);
+  const [planMainSolved, setPlanMainSolved] = useState<number>(0);
 
   // forceRegenerate=true clears any saved plan and rebuilds (used when the user
   // edits the goal or clicks the regenerate button). Otherwise, an existing
@@ -93,21 +94,25 @@ export default function TodayPage() {
 
     // First time today (no plan, or stale plan): persist what was just generated.
     // Re-roll case (force): same — overwrite.
+    let activePlan;
     if (!planForToday) {
-      const plan = {
+      activePlan = {
         date: today,
         goal: settings.dailyGoal,
         ratio,
         mainIds: result.mainIds,
       };
-      putDailyPlan(plan);
-      setPlanGoal(plan.goal);
+      putDailyPlan(activePlan);
     } else {
       // Use the plan's goal/ratio for display so the header is stable.
       adjustedGoal = planForToday.goal;
       ratio = planForToday.ratio;
-      setPlanGoal(planForToday.goal);
+      activePlan = planForToday;
     }
+    setPlanGoal(activePlan.goal);
+    setPlanMainSolved(
+      activePlan.mainIds.filter((id) => progress[id]?.status === "solved").length
+    );
 
     const queueProgress: Record<number, (typeof progress)[number]> = {};
     for (const q of queue) {
@@ -177,8 +182,6 @@ export default function TodayPage() {
   if (!data) return <div className="fg-faint">loading...</div>;
 
   const { queue, stats } = data;
-  const todayDone = Object.values(sessionStatus).filter((s) => s === "done").length;
-
   const applyGoal = (force = false) => {
     const n = parseInt(goalInput, 10);
     if (!Number.isFinite(n) || n < 1) {
@@ -200,7 +203,7 @@ export default function TodayPage() {
         <h1>today</h1>
         <div className="flex gap-16 items-center">
           <span className="fg-dim text-sm">{stats.streak}d streak</span>
-          <span className="text-sm">{stats.todaySolved + todayDone}/{planGoal || stats.adjustedGoal} done</span>
+          <span className="text-sm">{planMainSolved}/{planGoal || stats.adjustedGoal} done</span>
           <Link href="/review" className="fg-dim text-sm">{stats.reviewDue} reviews</Link>
         </div>
       </div>
